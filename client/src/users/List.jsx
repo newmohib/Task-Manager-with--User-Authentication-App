@@ -24,7 +24,7 @@ function List() {
                         <th style={{ width: '30%' }}>Name</th>
                         <th style={{ width: '30%' }}>Phone</th>
                         <th style={{ width: '30%' }}>Eamil</th>
-                        <th style={{ width: '10%' }}></th>
+                        <th style={{ width: '10%' }}>Actions</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -34,13 +34,13 @@ function List() {
                             <td>{user.phone}</td>
                             <td>{user.email}</td>
                             <td style={{ whiteSpace: 'nowrap' }}>
-                                <Link to={`edit/${user.id}`} className="btn btn-sm btn-primary me-1">Edit</Link>
-                                <button onClick={() => dispatch(userActions.delete(user.id))} className="btn btn-sm btn-danger" style={{ width: '60px' }} disabled={user.isDeleting}>
+                                <Link to={`edit/${user.id}?isSelf=${false}`} className="btn btn-sm btn-primary me-1">Edit</Link>
+                                {/* <button onClick={() => dispatch(userActions.delete(user.id))} className="btn btn-sm btn-danger" style={{ width: '60px' }} disabled={user.isDeleting}>
                                     {user.isDeleting 
                                         ? <span className="spinner-border spinner-border-sm"></span>
                                         : <span>Delete</span>
                                     }
-                                </button>
+                                </button> */}
                             </td>
                         </tr>
                     )}

@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Link, useParams } from 'react-router-dom';
+import { Link, useParams,useSearchParams } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as Yup from 'yup';
@@ -12,9 +12,20 @@ export { AddEdit };
 
 function AddEdit() {
     const { id } = useParams();
+    const [searchParams] = useSearchParams();
+    const isSelf = searchParams.get("isSelf") === "true"  
+
     const [title, setTitle] = useState();
     const dispatch = useDispatch();
     const user = useSelector(x => x.users?.item);
+
+    useEffect(() => {
+        // Fetch data or update state when `id` or `isSelf` changes
+        console.log("URL params changed", { id, isSelf });
+        dispatch(userActions.getById(id)).unwrap()
+        .then(user => reset(user));
+    }, [id, isSelf]); // Dependency array ensures re-render when these values change
+
 
     // form validation rules 
     const validationSchema = Yup.object().shape({
@@ -57,7 +68,9 @@ function AddEdit() {
                 const result = await dispatch(userActions.update({ id, data })).unwrap();
                 if (result?.id || result.isSuccess) {
                     message = 'User updated';
-                    history.navigate('/users');
+                    if (!isSelf) {
+                        history.navigate('/users');
+                    }
                     dispatch(alertActions.success({ message, showAfterRedirect: true }));
                 }else{
                     message = 'Invalid data';
