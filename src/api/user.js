@@ -56,4 +56,30 @@ module.exports = (app) => {
       next(err);
     }
   });
+  app.post("/user/forgot-password-request", async (req, res, next) => {
+    try {
+      const { data } = await service.ForgotPasswordRequest({
+        ...req.body,
+      });
+      return res.json(data);
+    } catch (err) {
+      console.log("login Error", { err });
+
+      // return res.json({ message: err || "Something went wrong" });
+      next(err);
+    }
+  });
+  app.post("/user/forgot-password-update", async (req, res, next) => {
+    try {
+      const { data } = await service.ForgotPasswordUpdate({
+        ...req.body,
+      });
+      return res.json(data);
+    } catch (err) {
+      console.log("login Error", { err });
+
+      // return res.json({ message: err || "Something went wrong" });
+      next(err);
+    }
+  });
 };

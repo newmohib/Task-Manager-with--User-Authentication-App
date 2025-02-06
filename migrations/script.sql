@@ -33,11 +33,11 @@ WHERE NOT EXISTS (SELECT 1 FROM roles WHERE role_name = 'Admin');
 
 CREATE TABLE password_reset_requests (
     id INT PRIMARY KEY AUTO_INCREMENT,
-    user_id INT NOT NULL,
+    user_id INT NOT NULL UNIQUE, -- Ensure each user has only one reset request
     reset_token VARCHAR(255) NOT NULL UNIQUE,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     expires_at TIMESTAMP DEFAULT (CURRENT_TIMESTAMP + INTERVAL 5 HOUR),
-    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
+    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
 -- CREATE TABLE ticket_replies (

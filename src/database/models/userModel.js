@@ -57,6 +57,65 @@ async function resetPassword({ email, password }) {
     throw new Error("Unable to Reset Password");
   }
 }
+async function resetForgotPassword({ userId, password }) {
+  try {
+    const query = `
+      UPDATE users
+      SET password = ?, updated_at = CURRENT_TIMESTAMP
+      WHERE id = ?
+    `;
+
+    // Use query params to prevent SQL injection
+    const [result] = await connection
+      .promise()
+      .query(query, [password, userId]);
+
+    console.log({ result });
+
+    if (result.affectedRows != 0) {
+      const passowrdResetQuery = `DELETE FROM password_reset_requests WHERE user_id = ?;`;
+      await connection.promise().query(passowrdResetQuery, [userId]);
+    }
+
+    if (result.affectedRows === 0) {
+      throw new Error("User Not Found or No Changes Made");
+    }
+    return {
+      message: "Password Updated",
+      isSuccess: true,
+    };
+  } catch (err) {
+    console.error("Error Reset Password:", err);
+    throw new Error("Unable to Reset Password");
+  }
+}
+//forgotPasswordRequest
+async function forgotPasswordRequest({ userId, resetToken }) {
+  try {
+    const query = `
+              INSERT INTO password_reset_requests (user_id, reset_token, created_at, expires_at)
+              VALUES (?, ?, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP + INTERVAL 5 HOUR)
+              ON DUPLICATE KEY UPDATE 
+              reset_token = VALUES(reset_token), 
+              created_at = VALUES(created_at), 
+              expires_at = VALUES(expires_at)`;
+
+    const [rows] = await connection
+      .promise()
+      .query(query, [userId, resetToken]);
+
+    if (rows.affectedRows === 0) {
+      throw new Error("Unable to create/update Forgot Password Request");
+    }
+    return {
+      id: rows.insertId,
+      resetToken,
+    };
+  } catch (err) {
+    console.error("Error Reset Password:", err);
+    throw new Error("Unable to Reset Password");
+  }
+}
 
 async function findCustomerByEmail({ email }) {
   try {
@@ -78,6 +137,36 @@ async function findCustomerByEmail({ email }) {
   } catch (err) {
     console.error("Error finding user:", err);
     throw new Error("Unable to Find user");
+  }
+}
+
+async function findResetPasswordToken({ resetToken }) {
+  try {
+    const query = `
+      SELECT prr.reset_token AS resetToken, u.id AS userId, u.email, u.name, u.salt
+      FROM password_reset_requests prr
+      JOIN users u ON prr.user_id = u.id
+      WHERE prr.reset_token = ? 
+        AND prr.expires_at > NOW() 
+      LIMIT 1;
+    `;
+
+    // Use query params to prevent SQL injection
+    const [rows, fields] = await connection
+      .promise()
+      .query(query, [resetToken]);
+    console.log("200", { rows });
+
+    // If no matching reset request is found, return null
+    if (rows.length === 0) {
+      return null;
+    }
+
+    // Return the first matching record (assuming rows is an array of results)
+    return rows[0];
+  } catch (err) {
+    console.error("Unable to Find Reset Password Token:", err);
+    throw new Error("Unable to Find Reset Password Token");
   }
 }
 
@@ -109,4 +198,7 @@ module.exports = {
   findCustomerByEmail,
   findCustomerById,
   resetPassword,
+  forgotPasswordRequest,
+  findResetPasswordToken,
+  resetForgotPassword,
 };

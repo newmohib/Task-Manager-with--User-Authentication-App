@@ -147,16 +147,62 @@ class CustomerService {
     }
   }
   // forgot password
-  async ResetPassword(userInputs) {
-    let { oldPassword, newPassword, email } = userInputs;
+  async ForgotPasswordUpdate(userInputs) {
+    let { password, resetToken } = userInputs;
     console.log({ userInputs });
 
-    if (!oldPassword || !newPassword || !email) {
-      //   throw new APIError('Missing required fields: title, description, or userId');
+    if (!password || !resetToken) {
+      //   throw new APIError('Missing required fields: password or resetToken');
       throw new APIError(
         "Missing required fields",
         STATUS_CODES.NOT_FOUND,
-        "Missing required fields: oldPassword or newPassword or email"
+        "Missing required fields: password or resetToken"
+      );
+    }
+
+    try {
+      const existingUser = await this.repository.FindResetPasswordToken({
+        resetToken,
+      });
+
+      if (existingUser && existingUser.resetToken && existingUser.salt) {
+        let userPassword = await GeneratePassword(password, existingUser.salt);
+
+        const updateUser = await this.repository.ResetForgotPassword({
+          userId: existingUser.userId,
+          password: userPassword,
+        });
+
+        if (!updateUser) {
+          throw new APIError(
+            "Unable to update User Password",
+            STATUS_CODES.NOT_FOUND,
+            null
+          );
+        }
+        return FormateData({ message: "Password Updated" });
+      } else {
+        throw new APIError(
+          "Invalid User Reset Token",
+          STATUS_CODES.NOT_FOUND,
+          null
+        );
+      }
+    } catch (err) {
+      throw new APIError("Data Not found", STATUS_CODES.NOT_FOUND, err);
+    }
+  }
+
+  //
+  async ForgotPasswordRequest(userInputs) {
+    let { email } = userInputs;
+    console.log({ userInputs });
+
+    if (!email) {
+      throw new APIError(
+        "Missing required fields",
+        STATUS_CODES.NOT_FOUND,
+        "Missing required fields: email"
       );
     }
 
@@ -164,42 +210,28 @@ class CustomerService {
       const existingUser = await this.repository.FindCustomer({ email });
 
       if (existingUser) {
-        const validPassword = await ValidatePassword(
-          oldPassword,
-          existingUser.password,
-          existingUser.salt
-        );
+        let resetToken = await GenerateSalt();
 
-        if (validPassword) {
-          // const token = await GenerateSignature({ email: existingUser.email, id: existingUser.id});
-          // return FormateData({id: existingUser.id, token });
+        const updateUser = await this.repository.ForgotPasswordRequest({
+          userId: existingUser.id,
+          resetToken: resetToken,
+        });
 
-          let userPassword = await GeneratePassword(
-            newPassword,
-            existingUser.salt
-          );
-
-          const updateUser = await this.repository.ResetPassword({
-            email,
-            password: userPassword,
-          });
-          //   console.log({ updateUser });
-
-          if (!updateUser) {
-            throw new APIError(
-              "Unable to update User Password",
-              STATUS_CODES.NOT_FOUND,
-              null
-            );
-          }
-          return FormateData({ message: "Password Updated" });
-        } else {
+        if (!updateUser) {
           throw new APIError(
-            "Invalid Old Password",
+            "Unable to add User Reset token",
             STATUS_CODES.NOT_FOUND,
             null
           );
         }
+        // send email here
+
+        return FormateData({
+          message:
+            "Sent an Email with reset link, please check you email and also check your spam folder",
+        });
+      } else {
+        throw new APIError("User not found", STATUS_CODES.NOT_FOUND, null);
       }
     } catch (err) {
       throw new APIError("Data Not found", STATUS_CODES.NOT_FOUND, err);
