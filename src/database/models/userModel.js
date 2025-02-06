@@ -1,11 +1,10 @@
-const mysql = require('mysql2');
-const { DB_URL } = require('../../config');
+const mysql = require("mysql2");
+const { DB_URL } = require("../../config");
 
 // Set up the MySQL connection
 const connection = mysql.createPool(DB_URL);
 
 async function createCustomer({ email, password, phone, salt, name, role }) {
-
   try {
     const query = `
       INSERT INTO users (email, password, salt, phone, name, role)
@@ -13,18 +12,49 @@ async function createCustomer({ email, password, phone, salt, name, role }) {
     `;
 
     // Use query params to prevent SQL injection
-    const [rows, fields] = await connection.promise().query(query, [email, password, salt, phone, name, role]);
-    console.log({rows});
-    
+    const [rows, fields] = await connection
+      .promise()
+      .query(query, [email, password, salt, phone, name, role]);
+    console.log({ rows });
 
     // Return the inserted customer details, including the customer ID
     return {
       id: rows.insertId,
-      email, password, phone, salt, name, role
+      email,
+      password,
+      phone,
+      salt,
+      name,
+      role,
     };
   } catch (err) {
     console.error("Error creating customer:", err);
     throw new Error("Unable to Create Customer");
+  }
+}
+// ResetPassword
+async function resetPassword({ email, password }) {
+  try {
+    const query = `
+      UPDATE users
+      SET password = ?, updated_at = CURRENT_TIMESTAMP
+      WHERE email = ?
+    `;
+
+    // Use query params to prevent SQL injection
+    const [result] = await connection.promise().query(query, [password, email]);
+    // console.log({ result });
+
+    if (result.affectedRows === 0) {
+      throw new Error("User Not Found or No Changes Made");
+    }
+    return {
+      message: "Password Updated",
+      isSuccess: true,
+    };
+  } catch (err) {
+    console.error("Error Reset Password:", err);
+    throw new Error("Unable to Reset Password");
   }
 }
 
@@ -36,8 +66,7 @@ async function findCustomerByEmail({ email }) {
 
     // Use query params to prevent SQL injection
     const [rows, fields] = await connection.promise().query(query, [email]);
-    console.log({rows});
-    
+    console.log({ rows });
 
     // If no user is found, return null
     if (rows.length === 0) {
@@ -52,7 +81,7 @@ async function findCustomerByEmail({ email }) {
   }
 }
 
-async function findCustomerById( id ) {
+async function findCustomerById(id) {
   try {
     const query = `
       SELECT * FROM users WHERE id = ?
@@ -60,8 +89,7 @@ async function findCustomerById( id ) {
 
     // Use query params to prevent SQL injection
     const [rows, fields] = await connection.promise().query(query, [id]);
-    console.log({rows});
-    
+    console.log({ rows });
 
     // If no customer is found, return null
     if (rows.length === 0) {
@@ -76,4 +104,9 @@ async function findCustomerById( id ) {
   }
 }
 
-module.exports = { createCustomer, findCustomerByEmail, findCustomerById };
+module.exports = {
+  createCustomer,
+  findCustomerByEmail,
+  findCustomerById,
+  resetPassword,
+};

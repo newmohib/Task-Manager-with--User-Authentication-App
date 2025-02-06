@@ -10,7 +10,7 @@ module.exports = (app) => {
       const { data } = await service.SignUp(req.body);
       return res.json(data);
     } catch (err) {
-      console.log("signup Error",{ err });
+      console.log("signup Error", { err });
       return res.json({ message: err.err || "Something went wrong" });
       // next(err);
     }
@@ -20,12 +20,11 @@ module.exports = (app) => {
     try {
       // const { email, password } = req.body;
 
-      
       const { data } = await service.SignIn(req.body);
       return res.json(data);
     } catch (err) {
-      console.log("login Error",{ err });
-      
+      console.log("login Error", { err });
+
       // return res.json({ message: err || "Something went wrong" });
       next(err);
     }
@@ -38,6 +37,22 @@ module.exports = (app) => {
       return res.json(data);
     } catch (err) {
       // return res.json({ message: err.err || "Something went wrong" });
+      next(err);
+    }
+  });
+  //oldPassword, newPassword, email
+  // ResetPassword
+  app.post("/user/reset-password", UserAuth, async (req, res, next) => {
+    try {
+      const { data } = await service.ResetPassword({
+        ...req.body,
+        email: req.user.email,
+      });
+      return res.json(data);
+    } catch (err) {
+      console.log("login Error", { err });
+
+      // return res.json({ message: err || "Something went wrong" });
       next(err);
     }
   });
