@@ -219,6 +219,29 @@ async function findCustomerById(id) {
   }
 }
 
+async function getAllUsers(user) {
+  try {
+    const query = `
+      SELECT email, phone, name, role, created_at, updated_at FROM users WHERE id <> ?
+    `;
+
+    // Use query params to prevent SQL injection
+    const [rows, fields] = await connection.promise().query(query,[user.id]);
+    console.log({ rows });
+
+    // If no customer is found, return null
+    if (rows.length === 0) {
+      return null;
+    }
+
+    // Returning the first customer (assuming rows is an array of results)
+    return rows;
+  } catch (err) {
+    console.error("Error finding customer by ID:", err);
+    throw new Error("Unable to Find Customer");
+  }
+}
+
 module.exports = {
   createCustomer,
   findCustomerByEmail,
@@ -227,5 +250,6 @@ module.exports = {
   forgotPasswordRequest,
   findResetPasswordToken,
   resetForgotPassword,
-  updateUserProfile
+  updateUserProfile,
+  getAllUsers
 };

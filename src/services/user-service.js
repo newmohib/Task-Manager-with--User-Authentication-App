@@ -109,6 +109,17 @@ class CustomerService {
       throw new APIError("Data Not found", STATUS_CODES.NOT_FOUND, err);
     }
   }
+  //GetAllUsers
+  async GetAllUsers(user) {
+
+    try {
+      const existingCustomer = await this.repository.GetAllUsers(user);
+      return FormateData(existingCustomer);
+    } catch (err) {
+      throw new APIError("Data Not found", STATUS_CODES.NOT_FOUND, err);
+    }
+  }
+
   // Reset Pasword
   async ResetPassword(userInputs) {
     let { oldPassword, newPassword, email } = userInputs;

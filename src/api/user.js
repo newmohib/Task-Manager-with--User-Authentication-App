@@ -4,7 +4,7 @@ const UserAuth = require("./middlewares/auth");
 module.exports = (app) => {
   const service = new UserService();
 
-  app.post("/user/signup", async (req, res, next) => {
+  app.post("/auth/register", async (req, res, next) => {
     try {
       // const { email, password, phone } = req.body;
       const { data } = await service.SignUp(req.body);
@@ -16,7 +16,7 @@ module.exports = (app) => {
     }
   });
 
-  app.post("/user/login", async (req, res, next) => {
+  app.post("/auth/login", async (req, res, next) => {
     try {
       // const { email, password } = req.body;
 
@@ -30,7 +30,7 @@ module.exports = (app) => {
     }
   });
 
-  app.get("/user/profile", UserAuth, async (req, res, next) => {
+  app.get("/auth/profile", UserAuth, async (req, res, next) => {
     try {
 
       const { data } = await service.GetProfile(req.user);
@@ -40,8 +40,19 @@ module.exports = (app) => {
       next(err);
     }
   });
+  //GetAllUsers
+  app.get("/auth/all-user", UserAuth, async (req, res, next) => {
+    try {
 
-  app.post("/user/update-profile", UserAuth, async (req, res, next) => {
+      const { data } = await service.GetAllUsers(req.user);
+      return res.json(data);
+    } catch (err) {
+      // return res.json({ message: err.err || "Something went wrong" });
+      next(err);
+    }
+  });
+
+  app.put("/auth/profile", UserAuth, async (req, res, next) => {
     try {
 
       const { data } = await service.UpdateUserProfile({...req.body, id: req.user.id});
@@ -53,7 +64,7 @@ module.exports = (app) => {
   });
  
   // ResetPassword
-  app.post("/user/reset-password", UserAuth, async (req, res, next) => {
+  app.post("/auth/reset-password", UserAuth, async (req, res, next) => {
     try {
       const { data } = await service.ResetPassword({
         ...req.body,
@@ -68,7 +79,7 @@ module.exports = (app) => {
     }
   });
   
-  app.post("/user/forgot-password-request", async (req, res, next) => {
+  app.post("/auth/forgot-password", async (req, res, next) => {
     try {
       const { data } = await service.ForgotPasswordRequest({
         ...req.body,
@@ -81,7 +92,7 @@ module.exports = (app) => {
       next(err);
     }
   });
-  app.post("/user/forgot-password-update", async (req, res, next) => {
+  app.post("/auth/reset-password-update", async (req, res, next) => {
     try {
       const { data } = await service.ForgotPasswordUpdate({
         ...req.body,

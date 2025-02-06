@@ -6,7 +6,8 @@ const {
   forgotPasswordRequest,
   findResetPasswordToken,
   resetForgotPassword,
-  updateUserProfile
+  updateUserProfile,
+  getAllUsers
 } = require("../models/userModel"); // Import the function
 
 const {
@@ -123,6 +124,22 @@ class CustomerRepository {
       throw new Error("Unable to Retrieve Customer");
     }
   }
+  async GetAllUsers(user) {
+    try {
+      
+      const users = await getAllUsers(user);
+
+      if (!users) {
+        throw new Error("Users not found");
+      }
+
+      return users;
+    } catch (err) {
+      console.error("Error getting Users by ID:", err);
+      throw new Error("Unable to Retrieve Users");
+    }
+  }
+  //getAllUsers
 }
 
 module.exports = CustomerRepository;
