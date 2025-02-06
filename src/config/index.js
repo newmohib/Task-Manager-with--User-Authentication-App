@@ -28,8 +28,11 @@ if (process.env.NODE_ENV !== "prod") {
 
 module.exports = {
   PORT: process.env.PORT,
-  // DB_BASE_URL: process.env.MONGODB_URI,
   DB_URL: process.env.MYSQL_URL,
-  // DB_ERROR_URL: process.env.MYSQL_URL + process.env.DB_ERROR_COLLECTION_NAME,
   APP_SECRET: process.env.APP_SECRET,
+  SMTP_HOST: process.env.SMTP_HOST,
+  SMTP_PORT: process.env.SMTP_PORT,
+  SMTP_USER: process.env.SMTP_USER,
+  SMTP_PASS: process.env.SMTP_PASS,
+  APP_URL: process.env.APP_URL,
 };

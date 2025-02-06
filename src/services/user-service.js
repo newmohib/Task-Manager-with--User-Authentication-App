@@ -11,6 +11,10 @@ const {
   BadRequestError,
   STATUS_CODES,
 } = require("../utils/app-errors");
+// import mail service
+const { sendEmail } = require("../utils/mailService");
+// config
+const { APP_URL } = require("../config");
 
 // All Business logic will be here
 class CustomerService {
@@ -225,11 +229,28 @@ class CustomerService {
           );
         }
         // send email here
-
-        return FormateData({
-          message:
-            "Sent an Email with reset link, please check you email and also check your spam folder",
+        let resetLink = `${APP_URL}/reset-password?resetToken=${resetToken}`;
+        const mailSendResult = await sendEmail({
+          //   to: email,
+          to: "newmohib@gmail.com",
+          subject: "Reset Password Request",
+          text: "Reset Password Request",
+          html: ``,
+          userName: existingUser.name,
+          resetLink,
         });
+        if (mailSendResult.isSuccess) {
+          return FormateData({
+            message:
+              "Sent an Email with reset link, please check you email and also check your spam folder",
+          });
+        } else {
+          throw new APIError(
+            "Can not send email",
+            STATUS_CODES.NOT_FOUND,
+            null
+          );
+        }
       } else {
         throw new APIError("User not found", STATUS_CODES.NOT_FOUND, null);
       }
