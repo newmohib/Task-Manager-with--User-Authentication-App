@@ -40,6 +40,17 @@ module.exports = (app) => {
       next(err);
     }
   });
+
+  app.get("/auth/profile/:id", UserAuth, async (req, res, next) => {
+    try {
+
+      const { data } = await service.GetProfile({...req.user, id: req.params.id});
+      return res.json(data);
+    } catch (err) {
+      // return res.json({ message: err.err || "Something went wrong" });
+      next(err);
+    }
+  });
   //GetAllUsers
   app.get("/auth/all-user", UserAuth, async (req, res, next) => {
     try {
@@ -56,6 +67,17 @@ module.exports = (app) => {
     try {
 
       const { data } = await service.UpdateUserProfile({...req.body, id: req.user.id});
+      return res.json(data);
+    } catch (err) {
+      // return res.json({ message: err.err || "Something went wrong" });
+      next(err);
+    }
+  });
+
+  app.put("/auth/user-profile/:id", UserAuth, async (req, res, next) => {
+    try {
+
+      const { data } = await service.UpdateUserProfile({...req.body, id: req.params.id});
       return res.json(data);
     } catch (err) {
       // return res.json({ message: err.err || "Something went wrong" });

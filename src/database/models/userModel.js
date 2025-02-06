@@ -222,7 +222,7 @@ async function findCustomerById(id) {
 async function getAllUsers(user) {
   try {
     const query = `
-      SELECT email, phone, name, role, created_at, updated_at FROM users WHERE id <> ?
+      SELECT id, email, phone, name, role, created_at, updated_at FROM users WHERE id <> ?
     `;
 
     // Use query params to prevent SQL injection
