@@ -147,6 +147,64 @@ class CustomerService {
     }
   }
   // forgot password
+  async ResetPassword(userInputs) {
+    let { oldPassword, newPassword, email } = userInputs;
+    console.log({ userInputs });
+
+    if (!oldPassword || !newPassword || !email) {
+      //   throw new APIError('Missing required fields: title, description, or userId');
+      throw new APIError(
+        "Missing required fields",
+        STATUS_CODES.NOT_FOUND,
+        "Missing required fields: oldPassword or newPassword or email"
+      );
+    }
+
+    try {
+      const existingUser = await this.repository.FindCustomer({ email });
+
+      if (existingUser) {
+        const validPassword = await ValidatePassword(
+          oldPassword,
+          existingUser.password,
+          existingUser.salt
+        );
+
+        if (validPassword) {
+          // const token = await GenerateSignature({ email: existingUser.email, id: existingUser.id});
+          // return FormateData({id: existingUser.id, token });
+
+          let userPassword = await GeneratePassword(
+            newPassword,
+            existingUser.salt
+          );
+
+          const updateUser = await this.repository.ResetPassword({
+            email,
+            password: userPassword,
+          });
+          //   console.log({ updateUser });
+
+          if (!updateUser) {
+            throw new APIError(
+              "Unable to update User Password",
+              STATUS_CODES.NOT_FOUND,
+              null
+            );
+          }
+          return FormateData({ message: "Password Updated" });
+        } else {
+          throw new APIError(
+            "Invalid Old Password",
+            STATUS_CODES.NOT_FOUND,
+            null
+          );
+        }
+      }
+    } catch (err) {
+      throw new APIError("Data Not found", STATUS_CODES.NOT_FOUND, err);
+    }
+  }
 }
 
 module.exports = CustomerService;

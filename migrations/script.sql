@@ -31,6 +31,14 @@ INSERT INTO roles (role_name)
 SELECT 'Admin'
 WHERE NOT EXISTS (SELECT 1 FROM roles WHERE role_name = 'Admin');
 
+CREATE TABLE password_reset_requests (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    user_id INT NOT NULL,
+    reset_token VARCHAR(255) NOT NULL UNIQUE,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    expires_at TIMESTAMP DEFAULT (CURRENT_TIMESTAMP + INTERVAL 5 HOUR),
+    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
+);
 
 -- CREATE TABLE ticket_replies (
 --   id INT AUTO_INCREMENT PRIMARY KEY,
