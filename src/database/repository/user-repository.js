@@ -6,6 +6,7 @@ const {
   forgotPasswordRequest,
   findResetPasswordToken,
   resetForgotPassword,
+  updateUserProfile
 } = require("../models/userModel"); // Import the function
 
 const {
@@ -25,6 +26,18 @@ class CustomerRepository {
     } catch (err) {
       console.error("Registration Error:", err);
       throw new Error("Unable to Register Customer");
+    }
+  }
+  // UpdateUserProfile
+  async UpdateUserProfile(userInfo) {
+    try {
+      // Call the createCustomer function from the model
+      const result = await updateUserProfile(userInfo);
+      // You can add additional logic, like sending a confirmation email, etc.
+      return result;
+    } catch (err) {
+      console.error("Update User Profile Error:", err);
+      throw new Error("Unable to Update User Profile");
     }
   }
   async ResetPassword(userInfo) {

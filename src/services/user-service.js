@@ -14,7 +14,7 @@ const {
 // import mail service
 const { sendEmail } = require("../utils/mailService");
 // config
-const { APP_URL } = require("../config");
+const { APP_URL, ADMIN_APP_URL } = require("../config");
 
 // All Business logic will be here
 class CustomerService {
@@ -76,6 +76,24 @@ class CustomerService {
       });
 
       return FormateData({ id: existingCustomer.id, token });
+    } catch (err) {
+      throw new APIError("Data Not found", STATUS_CODES.NOT_FOUND, err);
+    }
+  }
+
+  async UpdateUserProfile(userInputs) {
+    let { email, phone, name, id } = userInputs;
+
+    try {
+
+      const result = await this.repository.UpdateUserProfile({
+        email,
+        phone,
+        name,
+        id
+      });
+
+      return FormateData(result);
     } catch (err) {
       throw new APIError("Data Not found", STATUS_CODES.NOT_FOUND, err);
     }
@@ -229,10 +247,10 @@ class CustomerService {
           );
         }
         // send email here
-        let resetLink = `${APP_URL}/reset-password?resetToken=${resetToken}`;
+        let resetLink = `${ADMIN_APP_URL}/reset-password?resetToken=${resetToken}`;
         const mailSendResult = await sendEmail({
-          //   to: email,
-          to: "newmohib@gmail.com",
+          to: email,
+          // to: "newmohib@gmail.com",
           subject: "Reset Password Request",
           text: "Reset Password Request",
           html: ``,

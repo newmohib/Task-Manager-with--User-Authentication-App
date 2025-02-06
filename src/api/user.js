@@ -32,7 +32,7 @@ module.exports = (app) => {
 
   app.get("/user/profile", UserAuth, async (req, res, next) => {
     try {
-      //const { _id } = req.user;
+
       const { data } = await service.GetProfile(req.user);
       return res.json(data);
     } catch (err) {
@@ -40,7 +40,18 @@ module.exports = (app) => {
       next(err);
     }
   });
-  //oldPassword, newPassword, email
+
+  app.post("/user/update-profile", UserAuth, async (req, res, next) => {
+    try {
+
+      const { data } = await service.UpdateUserProfile({...req.body, id: req.user.id});
+      return res.json(data);
+    } catch (err) {
+      // return res.json({ message: err.err || "Something went wrong" });
+      next(err);
+    }
+  });
+ 
   // ResetPassword
   app.post("/user/reset-password", UserAuth, async (req, res, next) => {
     try {
@@ -56,6 +67,7 @@ module.exports = (app) => {
       next(err);
     }
   });
+  
   app.post("/user/forgot-password-request", async (req, res, next) => {
     try {
       const { data } = await service.ForgotPasswordRequest({

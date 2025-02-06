@@ -40,26 +40,27 @@ CREATE TABLE password_reset_requests (
     FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
--- CREATE TABLE ticket_replies (
+
+-- CREATE TABLE task_replies (
 --   id INT AUTO_INCREMENT PRIMARY KEY,
---   ticket_id INT NOT NULL, -- Reference to the ticket
+--   task_id INT NOT NULL, -- Reference to the task
 --   user_id INT NOT NULL, -- Reference to the user replying
 --   reply TEXT NOT NULL,
 --   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
---   FOREIGN KEY (ticket_id) REFERENCES tickets(id) ON DELETE CASCADE,
+--   FOREIGN KEY (task_id) REFERENCES tasks(id) ON DELETE CASCADE,
 --   FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
 -- );
 
 
 
--- CREATE TABLE ticket_status_history (
+-- CREATE TABLE task_status_history (
 --   id INT AUTO_INCREMENT PRIMARY KEY,
---   ticket_id INT NOT NULL, -- Reference to the ticket
+--   task_id INT NOT NULL, -- Reference to the task
 --   previous_status ENUM('Open', 'Resolved', 'Closed') NOT NULL,
 --   new_status ENUM('Open', 'Resolved', 'Closed') NOT NULL,
 --   changed_by INT NOT NULL, -- Reference to the user who changed the status
 --   changed_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
---   FOREIGN KEY (ticket_id) REFERENCES tickets(id) ON DELETE CASCADE,
+--   FOREIGN KEY (task_id) REFERENCES tasks(id) ON DELETE CASCADE,
 --   FOREIGN KEY (changed_by) REFERENCES users(id) ON DELETE CASCADE
 -- );
 

@@ -32,6 +32,32 @@ async function createCustomer({ email, password, phone, salt, name, role }) {
     throw new Error("Unable to Create Customer");
   }
 }
+// UpdateUserProfile
+async function updateUserProfile({ email, phone, name, id }) {
+  try {
+    const query = `
+      UPDATE users
+      SET email = ?, phone = ?, name = ?, updated_at = CURRENT_TIMESTAMP
+      WHERE id = ?
+    `;
+
+    // Use query params to prevent SQL injection
+    const [rows, fields] = await connection
+      .promise()
+      .query(query, [email, phone, name, id]);
+
+    if (rows.affectedRows === 0) {
+      throw new Error("User Not Found or No Changes Made");
+    }
+
+    // Return the inserted customer details, including the customer ID
+    return { isSuccess: true, message: "Profile Updated" };
+  } catch (err) {
+    console.error("Unable to Update User Profile:", err);
+    throw new Error("Unable to Update User Profile");
+  }
+}
+
 // ResetPassword
 async function resetPassword({ email, password }) {
   try {
@@ -173,7 +199,7 @@ async function findResetPasswordToken({ resetToken }) {
 async function findCustomerById(id) {
   try {
     const query = `
-      SELECT * FROM users WHERE id = ?
+      SELECT email, phone, name, role, created_at, updated_at FROM users WHERE id = ?
     `;
 
     // Use query params to prevent SQL injection
@@ -201,4 +227,5 @@ module.exports = {
   forgotPasswordRequest,
   findResetPasswordToken,
   resetForgotPassword,
+  updateUserProfile
 };

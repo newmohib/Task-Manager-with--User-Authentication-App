@@ -1,11 +1,11 @@
 const nodemailer = require("nodemailer");
-const { SMTP_HOST, SMTP_PORT, SMTP_USER, SMTP_PASS } = require("../config");
+const { SMTP_HOST, SMTP_PORT, SMTP_USER, SMTP_PASS,SMTP_SECURE} = require("../config");
 
 // Nodemailer SMTP Transport Configuration
 const transporter = nodemailer.createTransport({
   host: SMTP_HOST,
   port: SMTP_PORT,
-  secure: true, // false for STARTTLS, true for SSL
+  secure: SMTP_SECURE, // false for STARTTLS, true for SSL
   auth: {
     user: SMTP_USER,
     pass: SMTP_PASS,
