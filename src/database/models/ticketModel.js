@@ -1,5 +1,5 @@
-const mysql = require('mysql2');
-const { DB_URL } = require('../../config');
+const mysql = require("mysql2");
+const { DB_URL } = require("../../config");
 
 // Set up the MySQL connection
 const connection = mysql.createPool(DB_URL);
@@ -11,7 +11,9 @@ async function createTicket({ title, description, userId, dueDate }) {
       VALUES (?, ?, ?, ?)
     `;
 
-    const [rows] = await connection.promise().query(query, [title, description, userId, dueDate]);
+    const [rows] = await connection
+      .promise()
+      .query(query, [title, description, userId, dueDate]);
 
     return {
       ticketId: rows.insertId,
@@ -26,7 +28,6 @@ async function createTicket({ title, description, userId, dueDate }) {
   }
 }
 
-
 async function getAllTickets() {
   try {
     const query = `
@@ -37,6 +38,8 @@ async function getAllTickets() {
     `;
 
     const [rows] = await connection.promise().query(query);
+    //log
+    //console.log({ rows });
 
     return rows; // Returns an array of all tasks with details
   } catch (err) {
@@ -44,7 +47,6 @@ async function getAllTickets() {
     throw new Error("Unable to Fetch tasks");
   }
 }
-
 
 async function getTicketById(ticketId) {
   try {
@@ -70,7 +72,10 @@ async function getTicketById(ticketId) {
   }
 }
 
-async function updateTicket(ticketId, { subject, description, status, executiveId }) {
+async function updateTicket(
+  ticketId,
+  { subject, description, status, executiveId }
+) {
   try {
     const query = `
       UPDATE tickets
@@ -78,7 +83,9 @@ async function updateTicket(ticketId, { subject, description, status, executiveI
       WHERE id = ?
     `;
 
-    const [result] = await connection.promise().query(query, [subject, description, status, executiveId, ticketId]);
+    const [result] = await connection
+      .promise()
+      .query(query, [subject, description, status, executiveId, ticketId]);
 
     if (result.affectedRows === 0) {
       throw new Error("Ticket Not Found or No Changes Made");
@@ -117,6 +124,10 @@ async function deleteTicket(ticketId) {
   }
 }
 
-
-
-module.exports = { createTicket, getAllTickets, getTicketById, updateTicket, deleteTicket };
+module.exports = {
+  createTicket,
+  getAllTickets,
+  getTicketById,
+  updateTicket,
+  deleteTicket,
+};
