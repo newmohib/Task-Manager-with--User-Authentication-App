@@ -66,52 +66,54 @@ class CustomerService {
     }
   }
 
-  async getTicketById(ticketId) {
+  async getTicketById(taskId) {
     try {
-      if (!ticketId) {
+      if (!taskId) {
         throw new APIError(
-          "Invalid Ticket ID provided",
+          "Invalid Task ID provided",
           STATUS_CODES.NOT_FOUND,
           null
         );
       }
 
       // Call the getTicketById function from the model
-      const ticketInfo = await getTicketById(ticketId);
+      const taskInfo = await this.repository.getTicketById(taskId);
 
-      if (!ticketInfo) {
-        throw new APIError("Ticket not found", STATUS_CODES.NOT_FOUND, null);
+      if (!taskInfo) {
+        throw new APIError("Task not found", STATUS_CODES.NOT_FOUND, null);
       }
 
-      console.log("Fetched Ticket:", ticketInfo);
-
+      console.log("Fetched Task:", taskInfo);
       // Add additional logic here if needed
-      return ticketInfo;
+      return taskInfo;
     } catch (err) {
-      console.error("Get Ticket By ID Error:", err);
-      throw new APIError("Unable to Get Ticket", STATUS_CODES.NOT_FOUND, err);
+      console.error("Get Task By ID Error:", err);
+      throw new APIError("Unable to Get Task", STATUS_CODES.NOT_FOUND, err);
     }
   }
 
   // Update ticket
   async updateTicket(data) {
     try {
-      const { ticketId, ...updateFields } = data;
+      const { taskId, ...updateFields } = data;
 
-      if (!ticketId) {
+      if (!taskId) {
         throw new APIError(
-          "Ticket ID is required for update",
+          "Task ID is required for update",
           STATUS_CODES.NOT_FOUND,
           null
         );
       }
 
-      // Call the model function to update the ticket
-      const updatedTicket = await updateTicket(ticketId, updateFields);
+      // Call the model function to update the Task
+      const updatedTicket = await this.repository.updateTicket({
+        taskId,
+        updateFields,
+      });
 
       if (!updatedTicket) {
         throw new APIError(
-          "Unable to update ticket. Ticket not found.",
+          "Unable to update Task. Task not found.",
           STATUS_CODES.NOT_FOUND,
           null
         );
@@ -119,15 +121,15 @@ class CustomerService {
 
       return updatedTicket;
     } catch (err) {
-      console.error("Ticket Update Error:", err);
-      throw new Error("Unable to Update Ticket", STATUS_CODES.NOT_FOUND, null);
+      console.error("Task Update Error:", err);
+      throw new Error("Unable to Update Task", STATUS_CODES.NOT_FOUND, null);
     }
   }
 
   // Delete a ticket
-  async deleteTicket(ticketId) {
+  async deleteTicket(taskId) {
     try {
-      if (!ticketId) {
+      if (!taskId) {
         throw new APIError(
           "Ticket ID is required for deletion",
           STATUS_CODES.NOT_FOUND,
@@ -135,18 +137,18 @@ class CustomerService {
         );
       }
 
-      // Call the model function to delete the ticket
-      const result = await deleteTicket(ticketId);
+      // Call the model function to delete the Task
+      const result = await this.repository.deleteTicket(taskId);
 
       if (!result) {
         throw new APIError(
-          "Unable to delete ticket. Ticket not found.",
+          "Unable to delete Task. Task not found.",
           STATUS_CODES.NOT_FOUND,
           null
         );
       }
 
-      return { message: "Ticket deleted successfully", ticketId };
+      return { message: "Ticket deleted successfully", taskId };
     } catch (err) {
       console.error("Ticket Deletion Error:", err);
       throw new Error("Unable to Delete Ticket", STATUS_CODES.NOT_FOUND, null);

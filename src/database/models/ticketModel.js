@@ -48,76 +48,71 @@ async function getAllTickets() {
   }
 }
 
-async function getTicketById(ticketId) {
+async function getTicketById(taskId) {
   try {
     const query = `
-      SELECT t.id AS ticketId, t.subject, t.description, t.status, t.created_at, t.updated_at,
-             c.name AS customerName, e.name AS executiveName
-      FROM tickets t
-      LEFT JOIN users c ON t.customer_id = c.id
-      LEFT JOIN users e ON t.executive_id = e.id
+      SELECT t.id AS taskId, t.title, t.description, t.status, t.created_at, t.updated_at, t.due_date,
+             c.name AS userName, c.email AS userEmail 
+      FROM tasks t
+      LEFT JOIN users c ON t.user_id = c.id
       WHERE t.id = ?
     `;
 
-    const [rows] = await connection.promise().query(query, [ticketId]);
+    const [rows] = await connection.promise().query(query, [taskId]);
 
-    if (rows.length === 0) {
-      throw new Error("Ticket Not Found");
+    if (!rows.length || rows.length === 0) {
+      throw new Error("task Not Found");
     }
 
-    return rows[0]; // Returns the ticket details
+    return rows[0]; // Returns the task details
   } catch (err) {
-    console.error("Error fetching ticket:", err);
-    throw new Error("Unable to Fetch Ticket");
+    console.error("Error fetching task:", err);
+    throw new Error("Unable to Fetch task");
   }
 }
 
-async function updateTicket(
-  ticketId,
-  { subject, description, status, executiveId }
-) {
+async function updateTicket(taskId, { title, description, status }) {
   try {
     const query = `
-      UPDATE tickets
-      SET subject = ?, description = ?, status = ?, executive_id = ?, updated_at = CURRENT_TIMESTAMP
+      UPDATE tasks
+      SET title = ?, description = ?, status = ?, updated_at = CURRENT_TIMESTAMP, due_date = DATE_ADD(CURRENT_TIMESTAMP, INTERVAL 5 DAY)
       WHERE id = ?
     `;
 
     const [result] = await connection
       .promise()
-      .query(query, [subject, description, status, executiveId, ticketId]);
+      .query(query, [title, description, status, taskId]);
 
     if (result.affectedRows === 0) {
-      throw new Error("Ticket Not Found or No Changes Made");
+      throw new Error("Task Not Found or No Changes Made");
     }
 
     return {
-      ticketId,
-      subject,
+      taskId,
+      title,
       description,
       status,
-      executiveId,
     };
   } catch (err) {
-    console.error("Error updating ticket:", err);
-    throw new Error("Unable to Update Ticket");
+    console.error("Error updating Task:", err);
+    throw new Error("Unable to Update Task");
   }
 }
 
-async function deleteTicket(ticketId) {
+async function deleteTicket(taskId) {
   try {
     const query = `
-      DELETE FROM tickets
+      DELETE FROM tasks
       WHERE id = ?
     `;
 
-    const [result] = await connection.promise().query(query, [ticketId]);
+    const [result] = await connection.promise().query(query, [taskId]);
 
     if (result.affectedRows === 0) {
       throw new Error("Ticket Not Found");
     }
 
-    return { ticketId, message: "Ticket Deleted Successfully" };
+    return { taskId, message: "Ticket Deleted Successfully" };
   } catch (err) {
     console.error("Error deleting ticket:", err);
     throw new Error("Unable to Delete Ticket");

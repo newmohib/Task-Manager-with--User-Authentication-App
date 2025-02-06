@@ -1,5 +1,10 @@
-
-const {createTicket, getAllTickets, getTicketById, updateTicket, deleteTicket } = require('../models/ticketModel'); // Import the function
+const {
+  createTicket,
+  getAllTickets,
+  getTicketById,
+  updateTicket,
+  deleteTicket,
+} = require("../models/ticketModel"); // Import the function
 
 const {
   APIError,
@@ -33,44 +38,43 @@ class CustomerRepository {
     }
   }
 
-  async getTicketById(data) {
+  async getTicketById(taskId) {
     try {
       // Call the createCustomer function from the model
-      const ticktInfo = await getTicketById(data);
-      console.log("Fetched Ticket:", ticktInfo);
+      const ticktInfo = await getTicketById(taskId);
+      console.log("Fetched Task:", ticktInfo);
       // You can add additional logic, like sending a confirmation email, etc.
       return ticktInfo;
     } catch (err) {
-      console.error("Get Ticket Error:", err);
-      throw new Error("Unable to Get Ticket");
+      console.error("Get Task Error:", err);
+      throw new Error("Unable to Get Task");
     }
   }
 
-  async updateTicket(data) {
+  async updateTicket({ taskId, updateFields }) {
     try {
       // Call the createCustomer function from the model
-      const ticktInfo = await updateTicket(data.ticketId, data);
+      const ticktInfo = await updateTicket(taskId, updateFields);
       // You can add additional logic, like sending a confirmation email, etc.
       return ticktInfo;
     } catch (err) {
-      console.error("Ticket Update Error:", err);
-      throw new Error("Unable to Update Ticket");
+      console.error("Task Update Error:", err);
+      throw new Error("Unable to Update Task");
     }
   }
 
-  async deleteTicket(data) {
+  async deleteTicket(taskId) {
     try {
       // Call the createCustomer function from the model
-      const ticktInfo = await deleteTicket(data);
-      console.log("Deleted Ticket:", ticktInfo);
+      const ticktInfo = await deleteTicket(taskId);
+      console.log("Deleted Task:", ticktInfo);
       // You can add additional logic, like sending a confirmation email, etc.
       return ticktInfo;
     } catch (err) {
-      console.error("Delete Ticket Error:", err);
-      throw new Error("Unable to Delete Ticket");
+      console.error("Delete Task Error:", err);
+      throw new Error("Unable to Delete Task");
     }
   }
-
 }
 
 module.exports = CustomerRepository;

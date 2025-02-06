@@ -46,3 +46,9 @@
 {"level":"error","message":"Thu Feb 06 2025 03:48:52 GMT+0600 (Bangladesh Standard Time)-{\"name\":\"Unable to Create Ticket\",\"statusCode\":404,\"isOperational\":true}","private":true}
 {"level":"error","message":"Thu Feb 06 2025 04:09:55 GMT+0600 (Bangladesh Standard Time)-{\"name\":\"Unable to Get Tickets\",\"statusCode\":404,\"isOperational\":true}","private":true}
 {"level":"error","message":"Thu Feb 06 2025 04:10:52 GMT+0600 (Bangladesh Standard Time)-{\"name\":\"Unable to Get Tickets\",\"statusCode\":404,\"isOperational\":true}","private":true}
+{"level":"error","message":"Thu Feb 06 2025 13:17:26 GMT+0600 (Bangladesh Standard Time)-{\"name\":\"Unable to Get Task\",\"statusCode\":404,\"isOperational\":true}","private":true}
+{"level":"error","message":"Thu Feb 06 2025 13:35:37 GMT+0600 (Bangladesh Standard Time)-{}","private":true}
+{"level":"error","message":"Thu Feb 06 2025 15:02:44 GMT+0600 (Bangladesh Standard Time)-{}","private":true}
+{"level":"error","message":"Thu Feb 06 2025 15:03:50 GMT+0600 (Bangladesh Standard Time)-{}","private":true}
+{"level":"error","message":"Thu Feb 06 2025 15:04:46 GMT+0600 (Bangladesh Standard Time)-{}","private":true}
+{"level":"error","message":"Thu Feb 06 2025 15:05:42 GMT+0600 (Bangladesh Standard Time)-{}","private":true}

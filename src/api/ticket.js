@@ -21,35 +21,34 @@ module.exports = (app) => {
   app.get("/task/all", async (req, res, next) => {
     try {
       const data = await service.getAllTickets();
-      console.log({ data });
-
-      //return res.json(data);
-    } catch (err) {
-      // return res.json({ message: err.err || "Something went wrong" });
-      next(err);
-    }
-  });
-  app.get("/ticket/:id", async (req, res, next) => {
-    try {
-      const { data } = await service.getTicketById(req.params.id);
+      // console.log({ data });
       return res.json(data);
     } catch (err) {
       // return res.json({ message: err.err || "Something went wrong" });
       next(err);
     }
   });
-  app.post("/ticket/update", async (req, res, next) => {
+  app.get("/task/:id", async (req, res, next) => {
     try {
-      const { data } = await service.updateTicket(req.body);
+      const data = await service.getTicketById(req.params.id);
       return res.json(data);
     } catch (err) {
       // return res.json({ message: err.err || "Something went wrong" });
       next(err);
     }
   });
-  app.delete("/ticket/delete", async (req, res, next) => {
+  app.post("/task/update", async (req, res, next) => {
     try {
-      const { data } = await service.deleteTicket(req.body.id);
+      const data = await service.updateTicket(req.body);
+      return res.json(data);
+    } catch (err) {
+      // return res.json({ message: err.err || "Something went wrong" });
+      next(err);
+    }
+  });
+  app.delete("/task/:id", async (req, res, next) => {
+    try {
+      const data = await service.deleteTicket(req.params.id);
       return res.json(data);
     } catch (err) {
       // return res.json({ message: err.err || "Something went wrong" });
