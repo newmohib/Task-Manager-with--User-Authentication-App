@@ -1,8 +1,8 @@
-const TicketService = require("../services/ticket-service");
+const TaskService = require("../services/task-service");
 const UserAuth = require("./middlewares/auth");
 
 module.exports = (app) => {
-  const service = new TicketService();
+  const service = new TaskService();
 
   // api middleware for authentication
   app.use(UserAuth);
@@ -11,7 +11,7 @@ module.exports = (app) => {
     try {
       req.body.userId = req.user.id;
 
-      const { data } = await service.createTicket(req.body);
+      const { data } = await service.createTask(req.body);
       return res.json(data);
     } catch (err) {
       // return res.json({ message: err.err || "Something went wrong" });
@@ -20,7 +20,7 @@ module.exports = (app) => {
   });
   app.get("/task/all", async (req, res, next) => {
     try {
-      const data = await service.getAllTickets();
+      const data = await service.getAllTasks();
       // console.log({ data });
       return res.json(data);
     } catch (err) {
@@ -30,7 +30,7 @@ module.exports = (app) => {
   });
   app.get("/task/:id", async (req, res, next) => {
     try {
-      const data = await service.getTicketById(req.params.id);
+      const data = await service.getTaskById(req.params.id);
       return res.json(data);
     } catch (err) {
       // return res.json({ message: err.err || "Something went wrong" });
@@ -39,7 +39,7 @@ module.exports = (app) => {
   });
   app.post("/task/update", async (req, res, next) => {
     try {
-      const data = await service.updateTicket(req.body);
+      const data = await service.updateTask(req.body);
       return res.json(data);
     } catch (err) {
       // return res.json({ message: err.err || "Something went wrong" });
@@ -48,7 +48,7 @@ module.exports = (app) => {
   });
   app.delete("/task/:id", async (req, res, next) => {
     try {
-      const data = await service.deleteTicket(req.params.id);
+      const data = await service.deleteTask(req.params.id);
       return res.json(data);
     } catch (err) {
       // return res.json({ message: err.err || "Something went wrong" });

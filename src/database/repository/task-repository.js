@@ -1,35 +1,35 @@
 const {
-  createTicket,
-  getAllTickets,
-  getTicketById,
-  updateTicket,
-  deleteTicket,
-} = require("../models/ticketModel"); // Import the function
+  createTask,
+  getAllTasks,
+  getTaskById,
+  updateTask,
+  deleteTask,
+} = require("../models/taskModel"); // Import the function
 
-const {
-  APIError,
-  BadRequestError,
-  STATUS_CODES,
-} = require("../../utils/app-errors");
+// const {
+//   APIError,
+//   BadRequestError,
+//   STATUS_CODES,
+// } = require("../../utils/app-errors");
 
 //Dealing with data base operations
-class CustomerRepository {
-  async createTicket(data) {
+class TaskRepository {
+  async createTask(data) {
     try {
       // Call the createCustomer function from the model
-      const ticktInfo = await createTicket(data);
+      const ticktInfo = await createTask(data);
       // You can add additional logic, like sending a confirmation email, etc.
       return ticktInfo;
     } catch (err) {
-      console.error("Ticket Create Error:", err);
-      throw new Error("Unable to Create Ticket");
+      console.error("Task Create Error:", err);
+      throw new Error("Unable to Create Task");
     }
   }
 
-  async getAllTickets() {
+  async getAllTasks() {
     try {
       // Call the createCustomer function from the model
-      const ticktInfo = await getAllTickets();
+      const ticktInfo = await getAllTasks();
       // You can add additional logic, like sending a confirmation email, etc.
       return ticktInfo;
     } catch (err) {
@@ -38,10 +38,10 @@ class CustomerRepository {
     }
   }
 
-  async getTicketById(taskId) {
+  async getTaskById(taskId) {
     try {
       // Call the createCustomer function from the model
-      const ticktInfo = await getTicketById(taskId);
+      const ticktInfo = await getTaskById(taskId);
       console.log("Fetched Task:", ticktInfo);
       // You can add additional logic, like sending a confirmation email, etc.
       return ticktInfo;
@@ -51,10 +51,10 @@ class CustomerRepository {
     }
   }
 
-  async updateTicket({ taskId, updateFields }) {
+  async updateTask({ taskId, updateFields }) {
     try {
       // Call the createCustomer function from the model
-      const ticktInfo = await updateTicket(taskId, updateFields);
+      const ticktInfo = await updateTask(taskId, updateFields);
       // You can add additional logic, like sending a confirmation email, etc.
       return ticktInfo;
     } catch (err) {
@@ -63,10 +63,10 @@ class CustomerRepository {
     }
   }
 
-  async deleteTicket(taskId) {
+  async deleteTask(taskId) {
     try {
       // Call the createCustomer function from the model
-      const ticktInfo = await deleteTicket(taskId);
+      const ticktInfo = await deleteTask(taskId);
       console.log("Deleted Task:", ticktInfo);
       // You can add additional logic, like sending a confirmation email, etc.
       return ticktInfo;
@@ -77,4 +77,4 @@ class CustomerRepository {
   }
 }
 
-module.exports = CustomerRepository;
+module.exports = TaskRepository;

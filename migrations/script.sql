@@ -15,7 +15,7 @@ CREATE TABLE tasks (
   title VARCHAR(255) NOT NULL,
   description TEXT NOT NULL,
   status ENUM('pending', 'in_progress', 'completed', 'on_hold', 'canceled', 'failed', 'review', 'approved', 'rejected') DEFAULT 'pending',
-  user_id INT NOT NULL, -- Reference to the user who created the ticket
+  user_id INT NOT NULL, -- Reference to the user who created the tasks
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   due_date TIMESTAMP NULL,

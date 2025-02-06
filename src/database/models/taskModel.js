@@ -4,7 +4,7 @@ const { DB_URL } = require("../../config");
 // Set up the MySQL connection
 const connection = mysql.createPool(DB_URL);
 
-async function createTicket({ title, description, userId, dueDate }) {
+async function createTask({ title, description, userId, dueDate }) {
   try {
     const query = `
       INSERT INTO tasks (title, description, user_id, due_date)
@@ -16,7 +16,7 @@ async function createTicket({ title, description, userId, dueDate }) {
       .query(query, [title, description, userId, dueDate]);
 
     return {
-      ticketId: rows.insertId,
+      taskId: rows.insertId,
       title,
       description,
       userId,
@@ -28,7 +28,7 @@ async function createTicket({ title, description, userId, dueDate }) {
   }
 }
 
-async function getAllTickets() {
+async function getAllTasks() {
   try {
     const query = `
       SELECT t.id AS taskId, t.title, t.description, t.status, t.created_at, t.updated_at, t.due_date,
@@ -48,7 +48,7 @@ async function getAllTickets() {
   }
 }
 
-async function getTicketById(taskId) {
+async function getTaskById(taskId) {
   try {
     const query = `
       SELECT t.id AS taskId, t.title, t.description, t.status, t.created_at, t.updated_at, t.due_date,
@@ -71,7 +71,7 @@ async function getTicketById(taskId) {
   }
 }
 
-async function updateTicket(taskId, { title, description, status }) {
+async function updateTask(taskId, { title, description, status }) {
   try {
     const query = `
       UPDATE tasks
@@ -99,7 +99,7 @@ async function updateTicket(taskId, { title, description, status }) {
   }
 }
 
-async function deleteTicket(taskId) {
+async function deleteTask(taskId) {
   try {
     const query = `
       DELETE FROM tasks
@@ -109,20 +109,20 @@ async function deleteTicket(taskId) {
     const [result] = await connection.promise().query(query, [taskId]);
 
     if (result.affectedRows === 0) {
-      throw new Error("Ticket Not Found");
+      throw new Error("Task Not Found");
     }
 
-    return { taskId, message: "Ticket Deleted Successfully" };
+    return { taskId, message: "Task Deleted Successfully" };
   } catch (err) {
-    console.error("Error deleting ticket:", err);
-    throw new Error("Unable to Delete Ticket");
+    console.error("Error deleting Task:", err);
+    throw new Error("Unable to Delete Task");
   }
 }
 
 module.exports = {
-  createTicket,
-  getAllTickets,
-  getTicketById,
-  updateTicket,
-  deleteTicket,
+  createTask,
+  getAllTasks,
+  getTaskById,
+  updateTask,
+  deleteTask,
 };
