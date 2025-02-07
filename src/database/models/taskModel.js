@@ -4,16 +4,16 @@ const { DB_URL } = require("../../config");
 // Set up the MySQL connection
 const connection = mysql.createPool(DB_URL);
 
-async function createTask({ title, description, userId, dueDate }) {
+async function createTask({ title, description, userId, dueDate, status }) {
   try {
     const query = `
-      INSERT INTO tasks (title, description, user_id, due_date)
-      VALUES (?, ?, ?, ?)
+      INSERT INTO tasks (title, description, user_id, due_date, status)
+      VALUES (?, ?, ?, ?, ?)
     `;
 
     const [rows] = await connection
       .promise()
-      .query(query, [title, description, userId, dueDate]);
+      .query(query, [title, description, userId, dueDate, status]);
 
     return {
       taskId: rows.insertId,
@@ -28,55 +28,79 @@ async function createTask({ title, description, userId, dueDate }) {
   }
 }
 
-// async function getAllTasks() {
+// async function getAllTasks({ page, limit }) {
 //   try {
+//     const offset = (page - 1) * limit;
+
 //     const query = `
 //       SELECT t.id AS taskId, t.title, t.description, t.status, t.created_at, t.updated_at, t.due_date,
 //              c.name AS userName, c.email AS userEmail
 //       FROM tasks t
 //       LEFT JOIN users c ON t.user_id = c.id
+//       LIMIT ? OFFSET ?
 //     `;
 
-//     const [rows] = await connection.promise().query(query);
-//     //log
-//     //console.log({ rows });
+//     const countQuery = `SELECT COUNT(*) AS total FROM tasks`; // Get total count for pagination
 
-//     return rows; // Returns an array of all tasks with details
+//     // const [rows] = await connection.promise().query(query, [limit, offset]);
+//     // const [[{ total }]] = await connection.promise().query(countQuery); // Fetch total count
+//     // return { tasks: rows, total }; // Return both tasks and total count
+
+//     const [rows, totalCount] = await Promise.all([
+//       connection.promise().query(query, [limit, offset]),
+//       connection.promise().query(countQuery),
+//     ]);
+
+//     const tasks = rows[0]; // Extract tasks from the first query result
+//     const total = totalCount[0][0].total; // Extract total count from the second query result
+//     return { tasks, total, page, limit }; // Return both tasks and total count
 //   } catch (err) {
 //     console.error("Error fetching tasks:", err);
 //     throw new Error("Unable to Fetch tasks");
 //   }
 // }
 
-async function getAllTasks({ page, limit }) {
+async function getAllTasks({ page, limit, status, dueDate }) {
   try {
     const offset = (page - 1) * limit;
+    let whereClause = "WHERE 1=1"; // Always true, allowing easy appending
+    const queryParams = [];
+
+    if (status) {
+      whereClause += " AND t.status = ?";
+      queryParams.push(status);
+    }
+
+    if (dueDate) {
+      whereClause += " AND DATE(t.due_date) = ?";
+      queryParams.push(dueDate);
+    }
 
     const query = `
       SELECT t.id AS taskId, t.title, t.description, t.status, t.created_at, t.updated_at, t.due_date,
-             c.name AS userName, c.email AS userEmail 
-      FROM tasks t
-      LEFT JOIN users c ON t.user_id = c.id
-      LIMIT ? OFFSET ?
+        c.name AS userName, c.email AS userEmail 
+        FROM tasks t
+        LEFT JOIN users c ON t.user_id = c.id
+        ${whereClause} ORDER BY t.created_at DESC
+        LIMIT ? OFFSET ? 
     `;
 
-    const countQuery = `SELECT COUNT(*) AS total FROM tasks`; // Get total count for pagination
+    queryParams.push(limit, offset);
 
-    // const [rows] = await connection.promise().query(query, [limit, offset]);
-    // const [[{ total }]] = await connection.promise().query(countQuery); // Fetch total count
-    // return { tasks: rows, total }; // Return both tasks and total count
-
+    const countQuery = `SELECT COUNT(t.id) AS total FROM tasks t ${whereClause}`;
     const [rows, totalCount] = await Promise.all([
-      connection.promise().query(query, [limit, offset]),
-      connection.promise().query(countQuery),
+      connection.promise().query(query, queryParams),
+      connection.promise().query(countQuery, queryParams.slice(0, -2)), // Remove limit & offset for count query
     ]);
+    console.log(rows[0], totalCount[0]);
 
-    const tasks = rows[0]; // Extract tasks from the first query result
-    const total = totalCount[0][0].total; // Extract total count from the second query result
-    return { tasks, total, page, limit }; // Return both tasks and total count
+    const tasks = rows[0];
+    const total = totalCount[0][0].total;
+
+    return { tasks, total, page, limit };
   } catch (err) {
     console.error("Error fetching tasks:", err);
-    throw new Error("Unable to Fetch tasks");
+    throw new Error("Unable to fetch tasks");
   }
 }
 

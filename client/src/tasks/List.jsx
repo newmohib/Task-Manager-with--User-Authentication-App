@@ -17,10 +17,23 @@ function TaskList() {
 
   const [currentPage, setCurrentPage] = useState(1);
   const pageSize = 10;
+  const [statusFilter, setStatusFilter] = useState("");
+  const [dueDateFilter, setDueDateFilter] = useState("");
 
   useEffect(() => {
-    dispatch(taskActions.getAll({ page: currentPage, limit: pageSize }));
-  }, [currentPage]);
+    fetchTasks();
+  }, [currentPage, statusFilter, dueDateFilter]);
+
+  const fetchTasks = () => {
+    dispatch(
+      taskActions.getAll({
+        page: currentPage,
+        limit: pageSize,
+        status: statusFilter || null,
+        dueDate: dueDateFilter || null,
+      })
+    );
+  };
 
   const handlePageChange = (newPage) => {
     if (newPage >= 1 && newPage <= totalPages) {
@@ -28,11 +41,23 @@ function TaskList() {
     }
   };
 
+  const handleFilterChange = () => {
+    setCurrentPage(1); // Reset to first page when applying filters
+    fetchTasks();
+  };
+
+  const clearFilters = () => {
+    setStatusFilter("");
+    setDueDateFilter("");
+    setCurrentPage(1);
+    fetchTasks();
+  };
+
   const taskDelete = async (taskId) => {
     const result = await dispatch(taskActions.delete(taskId)).unwrap();
     let message = "Task is Deleted Successfully!";
     if (result?.isSuccess) {
-      dispatch(taskActions.getAll({ page: currentPage, limit: pageSize }));
+      fetchTasks();
       dispatch(alertActions.success({ message, showAfterRedirect: true }));
     } else {
       message = "Task Can't be Deleted, Please try again later";
@@ -52,6 +77,51 @@ function TaskList() {
           </Link>
         </div>
       </div>
+
+      {/* Filters Section */}
+      <div className="card p-3 mb-0">
+        <div className="d-flex justify-content-end  gap-2">
+          <div>
+            <select
+              className="form-select"
+              value={statusFilter}
+              onChange={(e) => setStatusFilter(e.target.value)}
+              // aria-label="Large select example"
+            >
+              <option value="">All Statuses</option>
+              <option value="pending">Pending</option>
+              <option value="in_progress">In Progress</option>
+              <option value="completed">Completed</option>
+              <option value="on_hold">on_hold</option>
+              <option value="canceled">canceled</option>
+              <option value="failed">failed</option>
+              <option value="review">review</option>
+              <option value="approved">approved</option>
+              <option value="rejected">rejected</option>
+            </select>
+          </div>
+          <div>
+            <input
+              type="date"
+              className="form-control "
+              value={dueDateFilter}
+              onChange={(e) => setDueDateFilter(e.target.value)}
+            />
+          </div>
+          <div>
+            <button
+              className="btn btn-primary mx-2"
+              onClick={handleFilterChange}
+            >
+              Apply
+            </button>
+            <button className="btn btn-secondary" onClick={clearFilters}>
+              Clear
+            </button>
+          </div>
+        </div>
+      </div>
+
       <div className="card p-4">
         <table className="table table-striped table-bordered">
           <thead>
@@ -105,6 +175,7 @@ function TaskList() {
             )}
           </tbody>
         </table>
+
         {/* Pagination Controls */}
         <div className="d-flex justify-content-between mt-3">
           <button

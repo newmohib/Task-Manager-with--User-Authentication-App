@@ -45,11 +45,28 @@ function createExtraActions() {
   //   );
   // }
 
+  // function getAllTasks() {
+  //   return createAsyncThunk(
+  //     `${name}/getAll`,
+  //     async ({ page = 1, limit = 10 }) =>
+  //       await fetchWrapper.get(`${baseUrl}/all?page=${page}&limit=${limit}`)
+  //   );
+  // }
+
   function getAllTasks() {
     return createAsyncThunk(
       `${name}/getAll`,
-      async ({ page = 1, limit = 10 }) =>
-        await fetchWrapper.get(`${baseUrl}/all?page=${page}&limit=${limit}`)
+      async ({ page = 1, limit = 10, status = "", dueDate = "" }) => {
+        if (!status) status = "";
+        if (!dueDate) dueDate = "";
+        let queryParams = new URLSearchParams({ page, limit, status, dueDate });
+        // if (status) queryParams.append("status", status);
+        // if (dueDate) queryParams.append("dueDate", dueDate);
+
+        return await fetchWrapper.get(
+          `${baseUrl}/all?${queryParams.toString()}`
+        );
+      }
     );
   }
 

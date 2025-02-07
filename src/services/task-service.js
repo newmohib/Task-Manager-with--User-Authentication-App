@@ -14,7 +14,7 @@ class CustomerService {
   }
 
   async createTask(taskInputs) {
-    const { title, description, userId, dueDate = null } = taskInputs;
+    const { title, description, userId, dueDate = null, status } = taskInputs;
 
     if (!title || !description || !userId) {
       //   throw new APIError('Missing required fields: title, description, or userId');
@@ -32,6 +32,7 @@ class CustomerService {
         description,
         userId,
         dueDate,
+        status,
       });
 
       if (taskInfo.taskId) {

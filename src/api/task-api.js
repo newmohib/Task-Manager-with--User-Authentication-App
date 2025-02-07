@@ -32,11 +32,11 @@ module.exports = (app) => {
 
   app.get("/tasks/all", async (req, res, next) => {
     try {
-      let { page = 1, limit = 10 } = req.query; // Default values if not provided
+      let { page = 1, limit = 10, status, dueDate } = req.query; // Default values if not provided
       page = parseInt(page, 10);
       limit = parseInt(limit, 10);
 
-      const data = await service.getAllTasks({ page, limit });
+      const data = await service.getAllTasks({ page, limit, status, dueDate });
       return res.json(data);
     } catch (err) {
       next(err);
