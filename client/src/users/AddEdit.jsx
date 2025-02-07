@@ -48,7 +48,9 @@ function AddEdit() {
 
   useEffect(() => {
     if (id) {
-      setTitle("Edit User");
+      const message = isSelf ? "Edit Profile" : "Edit User";
+      setTitle(message);
+
       // fetch user details into redux state and
       // populate form fields with reset()
       dispatch(userActions.getById(id))
@@ -57,7 +59,7 @@ function AddEdit() {
     } else {
       setTitle("Add User");
     }
-  }, []);
+  }, [isSelf]);
 
   async function onSubmit(data) {
     dispatch(alertActions.clear());
@@ -173,7 +175,7 @@ function AddEdit() {
             >
               Reset
             </button>
-            <Link to="/users" className="btn btn-link">
+            <Link to={`${isSelf ? "/" : "/users"}`} className="btn btn-link">
               Cancel
             </Link>
           </div>

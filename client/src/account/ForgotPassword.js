@@ -27,7 +27,7 @@ export function ForgotPassword() {
       dispatch(
         alertActions.success({
           message:
-            "Reset email sent successfully!, Please check in your Email and also Check your Mail spam folder",
+            "A password reset email has been sent successfully! Please check your inbox and spam folder if you don’t see it.",
           showAfterRedirect: false,
         })
       );
