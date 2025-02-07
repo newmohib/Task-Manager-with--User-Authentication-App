@@ -3,6 +3,7 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import * as Yup from "yup";
 import { useDispatch } from "react-redux";
 import { alertActions, userActions } from "_store";
+import { Link } from "react-router-dom";
 
 export function ForgotPassword() {
   const dispatch = useDispatch();
@@ -57,6 +58,9 @@ export function ForgotPassword() {
             )}
             Send Reset Link
           </button>
+          <Link to="../login" className="btn btn-link">
+            Go to Login page
+          </Link>
         </form>
       </div>
     </div>
