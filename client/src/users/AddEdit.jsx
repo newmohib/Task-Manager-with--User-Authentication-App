@@ -101,85 +101,89 @@ function AddEdit() {
     <>
       <h1>{title}</h1>
       {!(user?.loading || user?.error) && (
-        <form onSubmit={handleSubmit(onSubmit)}>
-          <div className="row">
-            <div className="mb-3 col">
-              <label className="form-label">Name</label>
-              <input
-                name="name"
-                type="text"
-                {...register("name")}
-                className={`form-control ${errors.name ? "is-invalid" : ""}`}
-              />
-              <div className="invalid-feedback">{errors.name?.message}</div>
+        <div className="card p-3">
+          <form onSubmit={handleSubmit(onSubmit)}>
+            <div className="row">
+              <div className="mb-3 col">
+                <label className="form-label">Name</label>
+                <input
+                  name="name"
+                  type="text"
+                  {...register("name")}
+                  className={`form-control ${errors.name ? "is-invalid" : ""}`}
+                />
+                <div className="invalid-feedback">{errors.name?.message}</div>
+              </div>
+              <div className="mb-3 col">
+                <label className="form-label">Phone</label>
+                <input
+                  name="phone"
+                  type="text"
+                  {...register("phone")}
+                  className={`form-control ${errors.phone ? "is-invalid" : ""}`}
+                />
+                <div className="invalid-feedback">{errors.phone?.message}</div>
+              </div>
             </div>
-            <div className="mb-3 col">
-              <label className="form-label">Phone</label>
-              <input
-                name="phone"
-                type="text"
-                {...register("phone")}
-                className={`form-control ${errors.phone ? "is-invalid" : ""}`}
-              />
-              <div className="invalid-feedback">{errors.phone?.message}</div>
+            <div className="row">
+              <div className="mb-3 col">
+                <label className="form-label">Email</label>
+                <input
+                  name="email"
+                  type="text"
+                  {...register("email")}
+                  className={`form-control ${errors.email ? "is-invalid" : ""}`}
+                />
+                <div className="invalid-feedback">{errors.email?.message}</div>
+              </div>
+              <div className="mb-3 col">
+                <label className="form-label">
+                  Password
+                  {id && (
+                    <em className="ml-1">
+                      {" "}
+                      ( Leave blank to keep the same password )
+                    </em>
+                  )}
+                </label>
+                <input
+                  name="password"
+                  type="password"
+                  {...register("password")}
+                  className={`form-control ${
+                    errors.password ? "is-invalid" : ""
+                  }`}
+                />
+                <div className="invalid-feedback">
+                  {errors.password?.message}
+                </div>
+              </div>
             </div>
-          </div>
-          <div className="row">
-            <div className="mb-3 col">
-              <label className="form-label">Email</label>
-              <input
-                name="email"
-                type="text"
-                {...register("email")}
-                className={`form-control ${errors.email ? "is-invalid" : ""}`}
-              />
-              <div className="invalid-feedback">{errors.email?.message}</div>
-            </div>
-            <div className="mb-3 col">
-              <label className="form-label">
-                Password
-                {id && (
-                  <em className="ml-1">
-                    {" "}
-                    ( Leave blank to keep the same password )
-                  </em>
+            <div className="mb-3">
+              <button
+                type="submit"
+                disabled={isSubmitting}
+                className="btn btn-primary me-2"
+              >
+                {isSubmitting && (
+                  <span className="spinner-border spinner-border-sm me-1"></span>
                 )}
-              </label>
-              <input
-                name="password"
-                type="password"
-                {...register("password")}
-                className={`form-control ${
-                  errors.password ? "is-invalid" : ""
-                }`}
-              />
-              <div className="invalid-feedback">{errors.password?.message}</div>
+                Save
+              </button>
+              <button
+                onClick={() => reset()}
+                type="button"
+                disabled={isSubmitting}
+                className="btn btn-secondary"
+              >
+                Reset
+              </button>
+              <Link to={`${isSelf ? "/" : "/users"}`} className="btn btn-link">
+                Cancel
+              </Link>
             </div>
-          </div>
-          <div className="mb-3">
-            <button
-              type="submit"
-              disabled={isSubmitting}
-              className="btn btn-primary me-2"
-            >
-              {isSubmitting && (
-                <span className="spinner-border spinner-border-sm me-1"></span>
-              )}
-              Save
-            </button>
-            <button
-              onClick={() => reset()}
-              type="button"
-              disabled={isSubmitting}
-              className="btn btn-secondary"
-            >
-              Reset
-            </button>
-            <Link to={`${isSelf ? "/" : "/users"}`} className="btn btn-link">
-              Cancel
-            </Link>
-          </div>
-        </form>
+          </form>
+        </div>
       )}
       {user?.loading && (
         <div className="text-center m-5">
