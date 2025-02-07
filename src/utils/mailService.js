@@ -1,5 +1,11 @@
 const nodemailer = require("nodemailer");
-const { SMTP_HOST, SMTP_PORT, SMTP_USER, SMTP_PASS,SMTP_SECURE} = require("../config");
+const {
+  SMTP_HOST,
+  SMTP_PORT,
+  SMTP_USER,
+  SMTP_PASS,
+  SMTP_SECURE,
+} = require("../config");
 
 // Nodemailer SMTP Transport Configuration
 const transporter = nodemailer.createTransport({
@@ -36,7 +42,7 @@ const sendEmail = async (params) => {
   }
   try {
     const mailOptions = {
-      from: `"Your App" <${SMTP_USER}>`, // Sender email
+      from: `"Task Manager" <${SMTP_USER}>`, // Sender email
       to, // Recipient email
       subject,
       text,
@@ -46,7 +52,12 @@ const sendEmail = async (params) => {
     const info = await transporter.sendMail(mailOptions);
     console.log("Email sent:", info.messageId);
 
-    return { isSuccess: true, message: "Email sent successfully!" };
+    if (info.messageId && info.accepted.length > 0) {
+      return { isSuccess: true, message: "Email sent successfully!" };
+    } else {
+      console.log("Failed to send email Info:", info);
+      return { isSuccess: false, error: "Failed to send email" };
+    }
   } catch (error) {
     console.error("Email send error:", error);
     return { isSuccess: false, error: "Failed to send email" };

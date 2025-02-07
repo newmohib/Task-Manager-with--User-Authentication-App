@@ -85,12 +85,11 @@ class CustomerService {
     let { email, phone, name, id } = userInputs;
 
     try {
-
       const result = await this.repository.UpdateUserProfile({
         email,
         phone,
         name,
-        id
+        id,
       });
 
       return FormateData(result);
@@ -111,7 +110,6 @@ class CustomerService {
   }
   //GetAllUsers
   async GetAllUsers(user) {
-
     try {
       const existingCustomer = await this.repository.GetAllUsers(user);
       return FormateData(existingCustomer);
@@ -258,7 +256,7 @@ class CustomerService {
           );
         }
         // send email here
-        let resetLink = `${ADMIN_APP_URL}/reset-password?resetToken=${resetToken}`;
+        let resetLink = `${ADMIN_APP_URL}/account/reset-password?resetToken=${resetToken}`;
         const mailSendResult = await sendEmail({
           to: email,
           // to: "newmohib@gmail.com",
