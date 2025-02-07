@@ -1,4 +1,5 @@
 const { TaskRepository } = require("../database");
+const { FormateData } = require("../utils");
 // const { FormateData, GeneratePassword, GenerateSalt, GenerateSignature, ValidatePassword } = require('../utils');
 const {
   APIError,
@@ -33,10 +34,18 @@ class CustomerService {
         dueDate,
       });
 
-      // Add additional logic here, such as sending notifications or logging
-      // Example: Send an email notification to the admin or executive
-
-      return taskInfo;
+      if (taskInfo.taskId) {
+        return FormateData({
+          isSuccess: true,
+          message: "Task Created Succesfully!",
+        });
+      } else {
+        throw new APIError(
+          "Unable to Create Task",
+          STATUS_CODES.NOT_FOUND,
+          null
+        );
+      }
     } catch (err) {
       console.error("Task Create Error:", err);
       throw new APIError("Unable to Create Task", STATUS_CODES.NOT_FOUND, err);
@@ -48,12 +57,6 @@ class CustomerService {
     try {
       // Call the getAllTasks function from the model
       const taskList = await this.repository.getAllTasks();
-
-      //console.log("Fetched Tasks:", taskList);
-
-      // Add additional logic here, such as filtering, formatting, or enriching the data
-      // Example: You could sort or group tasks by status
-      // taskList = taskList.sort((a, b) => a.status.localeCompare(b.status));
 
       return taskList;
     } catch (err) {
@@ -115,7 +118,12 @@ class CustomerService {
         );
       }
 
-      return updatedTask;
+      return FormateData({
+        isSuccess: true,
+        message: "Task Updated Succesfully!",
+      });
+
+      //return updatedTask;
     } catch (err) {
       console.error("Task Update Error:", err);
       throw new Error("Unable to Update Task", STATUS_CODES.NOT_FOUND, null);

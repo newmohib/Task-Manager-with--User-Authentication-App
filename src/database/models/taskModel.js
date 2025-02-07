@@ -71,17 +71,17 @@ async function getTaskById(taskId) {
   }
 }
 
-async function updateTask(taskId, { title, description, status }) {
+async function updateTask(taskId, { title, description, status, dueDate }) {
   try {
     const query = `
       UPDATE tasks
-      SET title = ?, description = ?, status = ?, updated_at = CURRENT_TIMESTAMP, due_date = DATE_ADD(CURRENT_TIMESTAMP, INTERVAL 5 DAY)
+      SET title = ?, description = ?, status = ?, updated_at = CURRENT_TIMESTAMP, due_date = ?
       WHERE id = ?
     `;
 
     const [result] = await connection
       .promise()
-      .query(query, [title, description, status, taskId]);
+      .query(query, [title, description, status, dueDate, taskId]);
 
     if (result.affectedRows === 0) {
       throw new Error("Task Not Found or No Changes Made");

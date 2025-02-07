@@ -7,7 +7,7 @@ module.exports = (app) => {
   // api middleware for authentication
   app.use(UserAuth);
 
-  app.post("/task/create", async (req, res, next) => {
+  app.post("/tasks/create", async (req, res, next) => {
     try {
       req.body.userId = req.user.id;
 
@@ -18,7 +18,7 @@ module.exports = (app) => {
       next(err);
     }
   });
-  app.get("/task/all", async (req, res, next) => {
+  app.get("/tasks/all", async (req, res, next) => {
     try {
       const data = await service.getAllTasks();
       // console.log({ data });
@@ -28,7 +28,7 @@ module.exports = (app) => {
       next(err);
     }
   });
-  app.get("/task/:id", async (req, res, next) => {
+  app.get("/tasks/:id", async (req, res, next) => {
     try {
       const data = await service.getTaskById(req.params.id);
       return res.json(data);
@@ -37,16 +37,16 @@ module.exports = (app) => {
       next(err);
     }
   });
-  app.post("/task/update", async (req, res, next) => {
+  app.put("/tasks/update", async (req, res, next) => {
     try {
-      const data = await service.updateTask(req.body);
+      const { data } = await service.updateTask(req.body);
       return res.json(data);
     } catch (err) {
       // return res.json({ message: err.err || "Something went wrong" });
       next(err);
     }
   });
-  app.delete("/task/:id", async (req, res, next) => {
+  app.delete("/tasks/:id", async (req, res, next) => {
     try {
       const data = await service.deleteTask(req.params.id);
       return res.json(data);
