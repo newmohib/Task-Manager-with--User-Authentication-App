@@ -18,13 +18,27 @@ module.exports = (app) => {
       next(err);
     }
   });
+
+  // app.get("/tasks/all", async (req, res, next) => {
+  //   try {
+  //     const data = await service.getAllTasks();
+  //     // console.log({ data });
+  //     return res.json(data);
+  //   } catch (err) {
+  //     // return res.json({ message: err.err || "Something went wrong" });
+  //     next(err);
+  //   }
+  // });
+
   app.get("/tasks/all", async (req, res, next) => {
     try {
-      const data = await service.getAllTasks();
-      // console.log({ data });
+      let { page = 1, limit = 10 } = req.query; // Default values if not provided
+      page = parseInt(page, 10);
+      limit = parseInt(limit, 10);
+
+      const data = await service.getAllTasks({ page, limit });
       return res.json(data);
     } catch (err) {
-      // return res.json({ message: err.err || "Something went wrong" });
       next(err);
     }
   });

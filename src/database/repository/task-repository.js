@@ -26,10 +26,10 @@ class TaskRepository {
     }
   }
 
-  async getAllTasks() {
+  async getAllTasks(data) {
     try {
       // Call the createCustomer function from the model
-      const ticktInfo = await getAllTasks();
+      const ticktInfo = await getAllTasks(data);
       // You can add additional logic, like sending a confirmation email, etc.
       return ticktInfo;
     } catch (err) {

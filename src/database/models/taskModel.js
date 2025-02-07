@@ -28,20 +28,52 @@ async function createTask({ title, description, userId, dueDate }) {
   }
 }
 
-async function getAllTasks() {
+// async function getAllTasks() {
+//   try {
+//     const query = `
+//       SELECT t.id AS taskId, t.title, t.description, t.status, t.created_at, t.updated_at, t.due_date,
+//              c.name AS userName, c.email AS userEmail
+//       FROM tasks t
+//       LEFT JOIN users c ON t.user_id = c.id
+//     `;
+
+//     const [rows] = await connection.promise().query(query);
+//     //log
+//     //console.log({ rows });
+
+//     return rows; // Returns an array of all tasks with details
+//   } catch (err) {
+//     console.error("Error fetching tasks:", err);
+//     throw new Error("Unable to Fetch tasks");
+//   }
+// }
+
+async function getAllTasks({ page, limit }) {
   try {
+    const offset = (page - 1) * limit;
+
     const query = `
       SELECT t.id AS taskId, t.title, t.description, t.status, t.created_at, t.updated_at, t.due_date,
              c.name AS userName, c.email AS userEmail 
       FROM tasks t
       LEFT JOIN users c ON t.user_id = c.id
+      LIMIT ? OFFSET ?
     `;
 
-    const [rows] = await connection.promise().query(query);
-    //log
-    //console.log({ rows });
+    const countQuery = `SELECT COUNT(*) AS total FROM tasks`; // Get total count for pagination
 
-    return rows; // Returns an array of all tasks with details
+    // const [rows] = await connection.promise().query(query, [limit, offset]);
+    // const [[{ total }]] = await connection.promise().query(countQuery); // Fetch total count
+    // return { tasks: rows, total }; // Return both tasks and total count
+
+    const [rows, totalCount] = await Promise.all([
+      connection.promise().query(query, [limit, offset]),
+      connection.promise().query(countQuery),
+    ]);
+
+    const tasks = rows[0]; // Extract tasks from the first query result
+    const total = totalCount[0][0].total; // Extract total count from the second query result
+    return { tasks, total, page, limit }; // Return both tasks and total count
   } catch (err) {
     console.error("Error fetching tasks:", err);
     throw new Error("Unable to Fetch tasks");

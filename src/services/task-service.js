@@ -53,10 +53,10 @@ class CustomerService {
   }
 
   // Fetch all tasks
-  async getAllTasks() {
+  async getAllTasks(data) {
     try {
       // Call the getAllTasks function from the model
-      const taskList = await this.repository.getAllTasks();
+      const taskList = await this.repository.getAllTasks(data);
 
       return taskList;
     } catch (err) {

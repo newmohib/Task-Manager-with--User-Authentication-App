@@ -38,10 +38,18 @@ function createExtraActions() {
     );
   }
 
+  // function getAllTasks() {
+  //   return createAsyncThunk(
+  //     `${name}/getAll`,
+  //     async () => await fetchWrapper.get(`${baseUrl}/all`)
+  //   );
+  // }
+
   function getAllTasks() {
     return createAsyncThunk(
       `${name}/getAll`,
-      async () => await fetchWrapper.get(`${baseUrl}/all`)
+      async ({ page = 1, limit = 10 }) =>
+        await fetchWrapper.get(`${baseUrl}/all?page=${page}&limit=${limit}`)
     );
   }
 
@@ -80,7 +88,15 @@ function createExtraReducers() {
           state.list = { loading: true };
         })
         .addCase(fulfilled, (state, action) => {
-          state.list = { value: action.payload };
+          const { tasks, total, page, limit } = action.payload;
+          const totalPages = Math.ceil(total / limit); // Calculate total pages
+
+          state.list = {
+            value: tasks,
+            total,
+            page,
+            totalPages,
+          };
         })
         .addCase(rejected, (state, action) => {
           state.list = { error: action.error };
