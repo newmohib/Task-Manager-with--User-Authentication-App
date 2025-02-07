@@ -55,7 +55,7 @@ function Nav() {
           {/* <span class="navbar-text">Navbar text with an inline element</span> */}
           <NavLink
             to={`users/edit/${auth.id}?isSelf=${true}`}
-            className="nav-item nav-link mx-2"
+            className="nav-item nav-link mx-4"
           >
             Edit Profile
           </NavLink>

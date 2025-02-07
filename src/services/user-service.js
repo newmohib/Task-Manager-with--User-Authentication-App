@@ -40,7 +40,12 @@ class CustomerService {
             email: existingCustomer.email,
             id: existingCustomer.id,
           });
-          return FormateData({ id: existingCustomer.id, token });
+          return FormateData({
+            id: existingCustomer.id,
+            name: existingCustomer.name,
+            email: existingCustomer.email,
+            token,
+          });
         }
       }
 
