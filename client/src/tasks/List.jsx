@@ -2,7 +2,7 @@ import { useEffect } from "react";
 import { Link } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 
-import { taskActions } from "_store";
+import { alertActions, taskActions } from "_store";
 
 export { TaskList };
 
@@ -17,6 +17,20 @@ function TaskList() {
   useEffect(() => {
     dispatch(taskActions.getAll());
   }, []);
+
+  const taskDelete = async (taskId) => {
+    // isSuccess
+    //dispatch(taskActions.delete(taskId))
+    const result = await dispatch(taskActions.delete(taskId)).unwrap();
+    let message = "Task is Deleted Successfully!";
+    if (result?.isSuccess) {
+      dispatch(taskActions.getAll());
+      dispatch(alertActions.success({ message, showAfterRedirect: true }));
+    } else {
+      message = "Task is Can't be Deleted, Please try again later";
+      dispatch(alertActions.error(message));
+    }
+  };
 
   return (
     <div>
@@ -53,7 +67,7 @@ function TaskList() {
                   Edit
                 </Link>
                 <button
-                  onClick={() => dispatch(taskActions.delete(task.taskId))}
+                  onClick={() => taskDelete(task.taskId)}
                   className="btn btn-sm btn-danger"
                   style={{ width: "60px" }}
                   disabled={task.isDeleting}

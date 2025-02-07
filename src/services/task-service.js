@@ -151,8 +151,7 @@ class CustomerService {
           null
         );
       }
-
-      return { message: "Task deleted successfully", taskId };
+      return { isSuccess: true, message: "Task deleted successfully", taskId };
     } catch (err) {
       console.error("Task Deletion Error:", err);
       throw new Error("Unable to Delete Task", STATUS_CODES.NOT_FOUND, null);
