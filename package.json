@@ -6,8 +6,7 @@
   "scripts": {
     "dev": "NODE_ENV=dev nodemon src/index.js",
     "start:backend": "NODE_ENV=dev node src/index.js",
-    "start:frontend": "node src/index.js",
-    "prod": "pm2 start src/index.js"
+    "start:frontend": "node ./server.js"
   },
   "repository": {
     "type": "git",
