@@ -4,7 +4,7 @@
   "description": "custom nodejs expressjs template with error handaling",
   "main": "index.js",
   "scripts": {
-    "dev": "NODE_ENV=dev nodemon src/index.js",
+    "dev": "NODE_ENV=dev nodemon ./src/index.js",
     "start:backend": "NODE_ENV=dev node ./src/index.js",
     "start:frontend": "node ./src/frontend-server.js",
     "prod": "pm2 start ./src/ecosystem.config.js"
