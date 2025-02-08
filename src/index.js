@@ -13,7 +13,7 @@ const StartServer = async () => {
 
   app
     .listen(PORT, () => {
-      console.log(`listening to port ${PORT}`);
+      console.log(`listening to port for Backend Server app ${PORT}`);
     })
     .on("error", (err) => {
       console.log(err);
@@ -25,7 +25,7 @@ StartServer();
 
 const StartFrontendServer = async () => {
   const app = express();
-  const PORT = process.env.ADMIN_END_PORT || 3000;
+  const PORT = process.env.ADMIN_END_PORT || 4000;
 
   // Serve the static files from the React app
   app.use(express.static(path.join(__dirname, "../client/build")));
@@ -37,7 +37,7 @@ const StartFrontendServer = async () => {
 
   app
     .listen(PORT, () => {
-      console.log(`listening to port ${PORT}`);
+      console.log(`listening to port for fronend Admin App ${PORT}`);
     })
     .on("error", (err) => {
       console.log(err);
