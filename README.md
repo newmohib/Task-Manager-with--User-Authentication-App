@@ -1,3 +1,8 @@
+### Live Server Demo in AWS EC2 with NGNIX Web Server
+
+- http://frontend.dev.mohib.net
+- http://backend.dev.mohib.net
+
 ### Run The Task Manager App
 
 ### Pre Requirements install
@@ -68,7 +73,11 @@
 ##### Deploy the server and run (VPS)
 
 ```
+- updae environment value for both backend and fronend
+- clone codebase
+- switch branch to prod
 - frontend build: npm run build
 - global install pm2: npm i -g pm2
 - Run: npm run prod
+
 ```
