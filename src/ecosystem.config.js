@@ -2,7 +2,7 @@ module.exports = {
   apps: [
     {
       name: "backend-app",
-      script: "./index.js",
+      script: "./src/index.js",
       watch: true,
       env: {
         NODE_ENV: "dev",
@@ -11,7 +11,7 @@ module.exports = {
     },
     {
       name: "frontend-app",
-      script: "./frontend-server.js",
+      script: "./src/frontend-server.js",
       watch: true,
       env: {
         NODE_ENV: "dev",
