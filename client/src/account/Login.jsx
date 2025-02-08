@@ -30,7 +30,9 @@ function Login() {
 
   return (
     <div className="card m-3">
-      <h4 className="card-header">Login</h4>
+      <div className="text-center">
+        <h4 className="card-header">Log in to Task Manager</h4>
+      </div>
       <div className="card-body">
         <form onSubmit={handleSubmit(onSubmit)}>
           <div className="mb-3">
@@ -53,18 +55,20 @@ function Login() {
             />
             <div className="invalid-feedback">{errors.password?.message}</div>
           </div>
-          <button disabled={isSubmitting} className="btn btn-primary">
-            {isSubmitting && (
-              <span className="spinner-border spinner-border-sm me-1"></span>
-            )}
-            Login
-          </button>
-          <Link to="../register" className="btn btn-link">
-            Register
-          </Link>
-          <Link to="../forgot-password" className="btn btn-link">
-            Forgot Password
-          </Link>
+          <div className="text-center">
+            <button disabled={isSubmitting} className="btn btn-primary">
+              {isSubmitting && (
+                <span className="spinner-border spinner-border-sm me-1"></span>
+              )}
+              Login
+            </button>
+            <Link to="../register" className="btn btn-link">
+              Create new account
+            </Link>
+            <Link to="../forgot-password" className="btn btn-link">
+              Forgot Password
+            </Link>
+          </div>
         </form>
       </div>
     </div>
