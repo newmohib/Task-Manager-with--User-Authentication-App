@@ -3,7 +3,7 @@ pipeline {
 
     environment {
         IMAGE_NAME = "newmohib/task-manager-and-user-authentication"
-        CONTAINER_NAME = "myapp"
+        CONTAINER_NAME = "task-manager-and-user-authentication"
         MYSQL_URL = credentials('MYSQL_URL')
         APP_URL = credentials('APP_URL')
         ADMIN_APP_URL = credentials('ADMIN_APP_URL')
@@ -17,7 +17,7 @@ pipeline {
     stages {
         stage('Checkout Code') {
             steps {
-                git branch: 'main', credentialsId: 'GIT_CREDENTIALS_ID', url: 'git@github.com:your-repo.git'
+                git branch: 'main-jenkins', credentialsId: 'github-personal-credential-2', url: 'git@github.com:Task-Manager-with--User-Authentication-App.git.git'
             }
         }
 
@@ -31,9 +31,10 @@ pipeline {
 
         stage('Push to Docker Hub') {
             steps {
-                withCredentials([string(credentialsId: 'DOCKER_HUB_PASSWORD', variable: 'DOCKER_PASS')]) {
+                withCredentials([usernamePassword(credentialsId:'docker-hub-personal-credential',passwordVariable:'PASS', usernameVariable:'USER')]){
                     script {
                         sh "echo $DOCKER_PASS | docker login -u mydockerhubusername --password-stdin"
+                        sh "echo $PASS | docker login -u $USER --password-stdin"
                         sh "docker tag ${IMAGE_NAME}:jenkins-1.0.1 ${IMAGE_NAME}:jenkins-1.0.1"
                         sh "docker push ${IMAGE_NAME}:jenkins-1.0.1"
                     }
@@ -43,10 +44,10 @@ pipeline {
 
         stage('Deploy Application') {
             steps {
-                withCredentials([
-                    string(credentialsId: 'DATABASE_URL', variable: 'DATABASE_URL'),
-                    string(credentialsId: 'JWT_SECRET', variable: 'JWT_SECRET')
-                ]) {
+                // withCredentials([
+                //     string(credentialsId: 'DATABASE_URL', variable: 'DATABASE_URL'),
+                //     string(credentialsId: 'JWT_SECRET', variable: 'JWT_SECRET'),
+                // ]) {
                     script {
                         def _PORT = PORT ?: "8000"
                         def _ADMIN_END_PORT = ADMIN_END_PORT ?: "4000"
@@ -55,18 +56,21 @@ pipeline {
                             docker stop ${CONTAINER_NAME} || true
                             docker rm ${CONTAINER_NAME} || true
                             docker run -d --name ${CONTAINER_NAME} \\
-                                -e DATABASE_URL=${DATABASE_URL} \\
-                                -e JWT_SECRET=${JWT_SECRET} \\
+                                -e MYSQL_URL=${MYSQL_URL} \\
+                                -e APP_URL=${APP_URL} \\
+                                -e ADMIN_APP_URL=${ADMIN_APP_URL} \\
+                                -e SMTP_HOST=${SMTP_HOST} \\
+                                -e SMTP_USER=${SMTP_USER} \\
+                                -e SMTP_PASS=${SMTP_PASS} \\
                                 -p ${_PORT}:8000 \\
                                 -p ${_ADMIN_END_PORT}:4000 \\
                                 ${IMAGE_NAME}:jenkins-1.0.1
                         """
                     }
-                }
+                //}
             }
         }
     }
-
     post {
         success {
             echo "Deployment successful! 🚀"
