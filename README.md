@@ -1,3 +1,10 @@
+#### Remove All
+
+```
+docker rm -f $(docker ps -aq)
+docker image rm -f $(docker image ls -q)
+```
+
 ### Live Server Demo in AWS EC2 with NGNIX Web Server
 
 - http://frontend.dev.mohib.net
@@ -81,3 +88,14 @@
 - Run: npm run prod
 
 ```
+
+#### build and run image and push to docker
+```
+
+docker build -t newmohib/task-manager-and-user-authentication:1.0.0 .
+docker push newmohib/task-manager-and-user-authentication:1.0.0
+docker run -p 8000:8000 -p 4000:4000 newmohib/task-manager-and-user-authentication:1.0.0
+
+```
+
+#### 
