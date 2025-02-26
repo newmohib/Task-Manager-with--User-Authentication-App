@@ -5,9 +5,10 @@
   "main": "index.js",
   "scripts": {
     "dev": "NODE_ENV=dev nodemon ./src/index.js",
-    "start:backend": "NODE_ENV=dev pm2 start ./src/index.js",
-    "start:frontend": "NODE_ENV=dev pm2 start ./src/frontend-server.js",
-    "prod": "NODE_ENV=dev pm2 start ./src/ecosystem.config.js"
+    "start:backend": "NODE_ENV=dev pm2 start ./src/index.js --name backend",
+    "start:frontend": "NODE_ENV=dev pm2 start ./src/frontend-server.js --name frontend",
+    "prod": "NODE_ENV=dev pm2 start ./src/ecosystem.config.js",
+    "start:both": "npm run start:backend && npm run start:frontend && pm2 logs"
   },
   "repository": {
     "type": "git",
