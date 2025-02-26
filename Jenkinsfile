@@ -15,11 +15,11 @@ pipeline {
     }
 
     stages {
-        stage('Checkout Code') {
-            steps {
-                git branch: 'main-jenkins', credentialsId: 'github-personal-credential-2', url: 'git@github.com:Task-Manager-with--User-Authentication-App.git.git'
-            }
-        }
+        // stage('Checkout Code') {
+        //     steps {
+        //         git branch: 'main-jenkins', credentialsId: 'github-personal-credential-2', url: 'git@github.com:Task-Manager-with--User-Authentication-App.git.git'
+        //     }
+        // }
 
         stage('Build Docker Image') {
             steps {
