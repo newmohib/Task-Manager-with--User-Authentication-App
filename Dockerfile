@@ -1,6 +1,21 @@
 # Use Node.js as base image
 FROM node:22.0.0
 
+# Set environment variables via build arguments
+ARG MYSQL_URL
+ARG SMTP_HOST
+ARG SMTP_USER
+ARG SMTP_PASS
+ARG APP_URL
+ARG ADMIN_APP_URL
+
+ENV MYSQL_URL=$MYSQL_URL
+ENV SMTP_HOST=$SMTP_HOST
+ENV SMTP_USER=$SMTP_USER
+ENV SMTP_PASS=$SMTP_PASS
+ENV APP_URL=$APP_URL
+ENV ADMIN_APP_URL=$ADMIN_APP_URL
+
 # Set the working directory
 WORKDIR /app
 
