@@ -27,7 +27,7 @@ pipeline {
             steps {
                 script {
                     echo "building the docker image... ${MYSQL_URL}"
-                    sh 'node -v && docker -v && docker images && docker ps -a'
+                    sh 'node -v && npm i && docker -v && docker images && docker ps -a'
                     sh "docker build -t newmohib/task-manager-and-user-authentication:jenkins-1.0.1 ."
                 }
             }
@@ -83,3 +83,69 @@ pipeline {
         }
     }
 }
+
+
+
+
+
+
+// pipeline {
+//     agent any
+//     tools {
+//         nodejs 'Nodejs-22.14.0'
+//     }
+//     environment {
+//         IMAGE_NAME = "newmohib/task-manager-and-user-authentication"
+//         CONTAINER_NAME = "task-manager-and-user-authentication"
+//         MYSQL_URL = credentials('MYSQL_URL')
+//         APP_URL = credentials('APP_URL')
+//         ADMIN_APP_URL = credentials('ADMIN_APP_URL')
+//         SMTP_HOST = credentials('SMTP_HOST')
+//         SMTP_USER = credentials('SMTP_USER')
+//         SMTP_PASS = credentials('SMTP_PASS')
+//         PORT = credentials('TASK_MANGE_APP_PORT')
+//         ADMIN_END_PORT = credentials('ADMIN_END_PORT')
+//     }
+//     stages {
+//         stage("init app") {
+//             steps {
+//                 script {
+//                     echo 'Initializing application and loading script.groovy'
+                    
+//                 }
+//             }
+//         }
+//         stage("install package") {
+//             steps {
+//                 script {
+//                     echo 'installing the application...'
+//                     sh 'node -v && npm i'
+//                 }
+//             }
+//         }
+//         stage("test") {
+//             steps {
+//                 script {  // Wrap inside script block
+//                     echo 'testing the application...'
+//                 }
+//             }
+//         }
+//         stage("Build Image") {
+//             steps {
+//                 script {
+//                     echo 'building the docker image...'
+//                     sh 'node -v && docker -v && docker images && docker ps -a'
+//                     sh 'docker build -t newmohib/task-manager-and-user-authentication:node-1.0.3 .'
+//                 }
+//             }
+//         }
+//         stage("deploy") {
+//             steps {
+//                 script {  // Wrap inside script block
+//                     echo 'deploying the application...'
+//                 }
+//             }
+//         }
+//     }
+// }
+
