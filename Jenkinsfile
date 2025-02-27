@@ -26,9 +26,9 @@ pipeline {
         stage('Build Docker Image') {
             steps {
                 script {
-                    echo "building the docker image... $MYSQL_URL"
+                    echo "building the docker image... ${MYSQL_URL}"
                     sh 'node -v && docker -v && docker images && docker ps -a'
-                    sh "docker build -t $IMAGE_NAME:jenkins-1.0.1 ."
+                    sh "docker build -t ${IMAGE_NAME}:jenkins-1.0.1 ."
                 }
             }
         }
