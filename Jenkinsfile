@@ -24,6 +24,7 @@ pipeline {
         stage('Build Docker Image') {
             steps {
                 script {
+                     echo "Starting to build docker image"
                     sh "docker build -t ${IMAGE_NAME}:jenkins-1.0.1 ."
                 }
             }
@@ -33,7 +34,8 @@ pipeline {
             steps {
                 withCredentials([usernamePassword(credentialsId:'docker-hub-personal-credential',passwordVariable:'PASS', usernameVariable:'USER')]){
                     script {
-                        sh "echo $DOCKER_PASS | docker login -u mydockerhubusername --password-stdin"
+                        
+                        //sh "echo $DOCKER_PASS | docker login -u mydockerhubusername --password-stdin"
                         sh "echo $PASS | docker login -u $USER --password-stdin"
                         sh "docker tag ${IMAGE_NAME}:jenkins-1.0.1 ${IMAGE_NAME}:jenkins-1.0.1"
                         sh "docker push ${IMAGE_NAME}:jenkins-1.0.1"
@@ -42,34 +44,34 @@ pipeline {
             }
         }
 
-        stage('Deploy Application') {
-            steps {
-                // withCredentials([
-                //     string(credentialsId: 'DATABASE_URL', variable: 'DATABASE_URL'),
-                //     string(credentialsId: 'JWT_SECRET', variable: 'JWT_SECRET'),
-                // ]) {
-                    script {
-                        def _PORT = PORT ?: "8000"
-                        def _ADMIN_END_PORT = ADMIN_END_PORT ?: "4000"
-                        sh """
-                            docker pull ${IMAGE_NAME}:jenkins-1.0.1
-                            docker stop ${CONTAINER_NAME} || true
-                            docker rm ${CONTAINER_NAME} || true
-                            docker run -d --name ${CONTAINER_NAME} \\
-                                -e MYSQL_URL=${MYSQL_URL} \\
-                                -e APP_URL=${APP_URL} \\
-                                -e ADMIN_APP_URL=${ADMIN_APP_URL} \\
-                                -e SMTP_HOST=${SMTP_HOST} \\
-                                -e SMTP_USER=${SMTP_USER} \\
-                                -e SMTP_PASS=${SMTP_PASS} \\
-                                -p ${_PORT}:8000 \\
-                                -p ${_ADMIN_END_PORT}:4000 \\
-                                ${IMAGE_NAME}:jenkins-1.0.1
-                        """
-                    }
-                //}
-            }
-        }
+        // stage('Deploy Application') {
+        //     steps {
+        //         // withCredentials([
+        //         //     string(credentialsId: 'DATABASE_URL', variable: 'DATABASE_URL'),
+        //         //     string(credentialsId: 'JWT_SECRET', variable: 'JWT_SECRET'),
+        //         // ]) {
+        //             script {
+        //                 def _PORT = PORT ?: "8000"
+        //                 def _ADMIN_END_PORT = ADMIN_END_PORT ?: "4000"
+        //                 sh """
+        //                     docker pull ${IMAGE_NAME}:jenkins-1.0.1
+        //                     docker stop ${CONTAINER_NAME} || true
+        //                     docker rm ${CONTAINER_NAME} || true
+        //                     docker run -d --name ${CONTAINER_NAME} \\
+        //                         -e MYSQL_URL=${MYSQL_URL} \\
+        //                         -e APP_URL=${APP_URL} \\
+        //                         -e ADMIN_APP_URL=${ADMIN_APP_URL} \\
+        //                         -e SMTP_HOST=${SMTP_HOST} \\
+        //                         -e SMTP_USER=${SMTP_USER} \\
+        //                         -e SMTP_PASS=${SMTP_PASS} \\
+        //                         -p ${_PORT}:8000 \\
+        //                         -p ${_ADMIN_END_PORT}:4000 \\
+        //                         ${IMAGE_NAME}:jenkins-1.0.1
+        //                 """
+        //             }
+        //         //}
+        //     }
+        // }
     }
     post {
         success {
