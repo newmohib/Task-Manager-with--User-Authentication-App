@@ -95,11 +95,24 @@ pipeline {
     tools {
         nodejs 'Nodejs-22.14.0'
     }
+    environment {
+        IMAGE_NAME = "newmohib/task-manager-and-user-authentication"
+        CONTAINER_NAME = "task-manager-and-user-authentication"
+        MYSQL_URL = credentials('MYSQL_URL')
+        APP_URL = credentials('APP_URL')
+        ADMIN_APP_URL = credentials('ADMIN_APP_URL')
+        SMTP_HOST = credentials('SMTP_HOST')
+        SMTP_USER = credentials('SMTP_USER')
+        SMTP_PASS = credentials('SMTP_PASS')
+        PORT = credentials('TASK_MANGE_APP_PORT')
+        ADMIN_END_PORT = credentials('ADMIN_END_PORT')
+    }
     stages {
         stage("init app") {
             steps {
                 script {
-                    echo 'Initializing application and loading script.groovy'
+                    echo 'Initializing application and loading '
+                    echo "MYSQL_URL: ${MYSQL_URL}"
                     
                 }
             }
