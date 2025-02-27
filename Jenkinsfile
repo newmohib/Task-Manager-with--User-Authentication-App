@@ -34,7 +34,7 @@ pipeline {
                 script {
                     echo 'building the docker image...'
                     sh 'node -v && docker -v && docker images && docker ps -a'
-                    sh 'docker build -t newmohib/node-docker-nginx-sample-app:node-1.0.3 .'
+                   // sh 'docker build -t newmohib/node-docker-nginx-sample-app:node-1.0.3 .'
                 }
             }
         }
