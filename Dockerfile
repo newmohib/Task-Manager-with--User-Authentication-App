@@ -23,7 +23,7 @@ WORKDIR /app
 COPY package*.json ./
 
 # Install dependencies
-RUN npm install
+# RUN npm install
 
 # Install PM2 globally
 RUN npm install -g pm2
@@ -35,8 +35,8 @@ COPY . .
 RUN touch /app/app_error.log && chmod 666 /app/app_error.log
 
 # Change to the frontend directory, install dependencies, and build the React app
-WORKDIR /app/client
-RUN npm install
+# WORKDIR /app/client
+# RUN npm install
 # RUN npm run build
 
 # Back to the root app directory
