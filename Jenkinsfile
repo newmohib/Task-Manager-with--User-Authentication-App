@@ -28,7 +28,7 @@ pipeline {
                 script {
                     echo "building the docker image... ${MYSQL_URL}"
                     sh 'node -v && docker -v && docker images && docker ps -a'
-                    sh "docker build -t ${IMAGE_NAME}:jenkins-1.0.1 ."
+                    sh "docker build -t newmohib/task-manager-and-user-authentication:jenkins-1.0.1 ."
                 }
             }
         }
