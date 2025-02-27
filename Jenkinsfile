@@ -19,6 +19,7 @@ pipeline {
                 script {
                     echo 'installing the application...'
                     sh 'node -v && npm i'
+                    sh 'cd client && npm i && npm run build && cd ..'
                 }
             }
         }
