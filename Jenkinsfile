@@ -1,6 +1,8 @@
 pipeline {
     agent any
-
+    tools {
+        nodejs 'Nodejs-22.14.0'
+    }
     environment {
         IMAGE_NAME = "newmohib/task-manager-and-user-authentication"
         CONTAINER_NAME = "task-manager-and-user-authentication"
@@ -25,7 +27,7 @@ pipeline {
             steps {
                 script {
                     echo 'building the docker image...'
-                    sh 'node -v && npm i && docker -v && docker images && docker ps -a'
+                    sh 'node -v && docker -v && docker images && docker ps -a'
                     sh "docker build -t $IMAGE_NAME:jenkins-1.0.1 ."
                 }
             }
