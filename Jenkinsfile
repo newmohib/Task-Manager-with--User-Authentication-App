@@ -81,8 +81,10 @@ pipeline {
                         //         -p ${_ADMIN_END_PORT}:4000 \\
                         //         ${env.IMAGE_NAME}:jenkins-1.0.1
                         // """
+
+                        //\"${dockerCmd}\"
                         sshagent(['aws-linux-server-2gb-ram']) {
-                            sh "ssh -o StrictHostKeyChecking=no ec2-user@18.143.98.4  ${dockerCmd}"
+                            sh "ssh -o StrictHostKeyChecking=no ec2-user@18.143.98.4"
                         }
                     }
             }
