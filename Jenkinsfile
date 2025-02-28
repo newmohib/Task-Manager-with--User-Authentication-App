@@ -108,7 +108,7 @@ pipeline {
         stage('Deploy Application') {
             steps {
                 script {
-                     def MYSQL_URL = credentials('MYSQL_URL')
+                    def MYSQL_URL = env.MYSQL_URL
                     echo "Using MYSQL_URL: ${MYSQL_URL}"
                 }
             }
