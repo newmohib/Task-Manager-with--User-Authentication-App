@@ -110,6 +110,9 @@ pipeline {
                 script {
                     def MYSQL_URL = env.MYSQL_URL
                     echo "Using MYSQL_URL: ${MYSQL_URL}"
+                    env.getEnvironment().each { key, value ->
+                        echo "${key} = ${value}"
+                    }
                 }
             }
         }
