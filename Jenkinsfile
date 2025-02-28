@@ -95,10 +95,7 @@ pipeline {
     tools {
         nodejs 'Nodejs-22.14.0'
     }
-    environment {
-       
-        MYSQL_URL = "${MYSQL_URL}"  // Get the global env variable
-    }
+    
     stages {
         stage("init app") {
             steps {
@@ -111,6 +108,7 @@ pipeline {
         stage('Deploy Application') {
             steps {
                 script {
+                     def MYSQL_URL = credentials('MYSQL_URL')
                     echo "Using MYSQL_URL: ${MYSQL_URL}"
                 }
             }
