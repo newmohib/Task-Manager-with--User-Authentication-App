@@ -97,7 +97,7 @@ pipeline {
     }
     environment {
        
-        MYSQL_URL = "${env.MYSQL_URL}"  // Get the global env variable
+        MYSQL_URL = "${MYSQL_URL}"  // Get the global env variable
     }
     stages {
         stage("init app") {
