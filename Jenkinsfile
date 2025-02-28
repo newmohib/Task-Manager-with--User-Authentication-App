@@ -48,6 +48,7 @@ pipeline {
         stage('Deploy Application') {
             steps {
                     script {
+                        sh "ssh -vvv -i /path/to/private_key ec2-user@18.143.98.4"
                         def _PORT = env.PORT ?: 8000
                         def _ADMIN_END_PORT = env.ADMIN_END_PORT ?: 4000
                         // Store the docker command in a variable
