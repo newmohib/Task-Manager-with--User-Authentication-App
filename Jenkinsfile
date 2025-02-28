@@ -47,14 +47,11 @@ pipeline {
 
         stage('Deploy Application') {
             steps {
-                // withCredentials([
-                //     string(credentialsId: 'DATABASE_URL', variable: 'DATABASE_URL'),
-                //     string(credentialsId: 'JWT_SECRET', variable: 'JWT_SECRET'),
-                // ]) {
                     script {
                         def _PORT = env.PORT ?: 8000
                         def _ADMIN_END_PORT = env.ADMIN_END_PORT ?: 4000
-                        sh """
+                        // Store the docker command in a variable
+                        def dockerCmd = """
                             docker pull ${env.IMAGE_NAME}:jenkins-1.0.1
                             docker stop ${env.CONTAINER_NAME} || true
                             docker rm ${env.CONTAINER_NAME} || true
@@ -69,8 +66,25 @@ pipeline {
                                 -p ${_ADMIN_END_PORT}:4000 \\
                                 ${env.IMAGE_NAME}:jenkins-1.0.1
                         """
+                        // sh """
+                        //     docker pull ${env.IMAGE_NAME}:jenkins-1.0.1
+                        //     docker stop ${env.CONTAINER_NAME} || true
+                        //     docker rm ${env.CONTAINER_NAME} || true
+                        //     docker run -d --name ${env.CONTAINER_NAME} \\
+                        //         -e MYSQL_URL=${env.MYSQL_URL} \\
+                        //         -e APP_URL=${env.APP_URL} \\
+                        //         -e ADMIN_APP_URL=${env.ADMIN_APP_URL} \\
+                        //         -e SMTP_HOST=${env.SMTP_HOST} \\
+                        //         -e SMTP_USER=${env.SMTP_USER} \\
+                        //         -e SMTP_PASS=${env.SMTP_PASS} \\
+                        //         -p ${_PORT}:8000 \\
+                        //         -p ${_ADMIN_END_PORT}:4000 \\
+                        //         ${env.IMAGE_NAME}:jenkins-1.0.1
+                        // """
+                        sshagent(['aws-linux-server-2gb-ram']) {
+                            sh "ssh -o StrictHostKeyChecking=no ec2-user@18.143.98.4  ${dockerCmd}"
+                        }
                     }
-                //}
             }
         }
     }
