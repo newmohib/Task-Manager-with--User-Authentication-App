@@ -58,14 +58,18 @@ pipeline {
             steps {
                 script {
                     sshagent(['aws-linux-server-2gb-ram']) {
-                        def dockerCmd = """
-                            node -v
-                            npm -v
-                            docker -v
-                            docker images
-                            docker ps -a
-                        """
-                        sh "ssh -o StrictHostKeyChecking=no ec2-user@18.143.98.4 ${dockerCmd}"
+                        sh '''
+                            ssh -o StrictHostKeyChecking=no ec2-user@18.143.98.4 \
+                            "echo Connected successfully! && node -v && npm -v && docker -v && docker images && docker ps -a"
+                        '''
+                        // def dockerCmd = """
+                        //     node -v
+                        //     npm -v
+                        //     docker -v
+                        //     docker images
+                        //     docker ps -a
+                        // """
+                        // sh "ssh -o StrictHostKeyChecking=no ec2-user@18.143.98.4 ${dockerCmd}"
                     }
                 }
             }
