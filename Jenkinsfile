@@ -121,8 +121,8 @@ pipeline {
                                 -e SMTP_HOST=${env.SMTP_HOST} \\
                                 -e SMTP_USER=${env.SMTP_USER} \\
                                 -e SMTP_PASS=${env.SMTP_PASS} \\
-                                -p ${env.PORT}:8000 \\
-                                -p ${env.ADMIN_END_PORT}:4000 \\
+                                -p 8001:8001 \\
+                                -p 4001:4001 \\
                                 ${env.IMAGE_NAME}:jenkins-1.0.1
                         """
 
