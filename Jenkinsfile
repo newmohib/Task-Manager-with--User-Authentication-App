@@ -62,8 +62,15 @@ pipeline {
                         //     ssh -o StrictHostKeyChecking=no ec2-user@18.143.98.4 \
                         //     "echo Connected successfully! && node -v && npm -v && docker -v && docker images && docker ps -a"
                         // '''
-                        def dockerCmd = "echo Connected successfully! && node -v && npm -v && docker -v && docker images && docker ps -a"
-                        sh """ssh -o StrictHostKeyChecking=no ec2-user@18.143.98.4 ${dockerCmd}"""
+                        def remoteCommand = """
+                            echo Connected successfully! &&
+                            node -v &&
+                            npm -v &&
+                            docker -v &&
+                            docker images &&
+                            docker ps -a
+                        """
+                        sh "ssh -o StrictHostKeyChecking=no ec2-user@18.143.88.4 '${remoteCommand}'"
                     }
                 }
             }
