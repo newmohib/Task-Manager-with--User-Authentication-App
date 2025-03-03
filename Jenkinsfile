@@ -7,7 +7,7 @@ pipeline {
                 script {
                     sshagent(['aws-linux-server-2gb-ram']) {
                         // Test SSH connection
-                        sh "ssh -o StrictHostKeyChecking=no ec2-user@47.129.4.52 'echo Connected successfully!'"
+                        sh "ssh -o StrictHostKeyChecking=no ubuntu@18.143.98.4 'echo Connected successfully!'"
                     }
                 }
             }
