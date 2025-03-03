@@ -86,8 +86,8 @@ pipeline {
             steps {
                     script {
                        
-                        def _PORT = env.PORT ?: 8000
-                        def _ADMIN_END_PORT = env.ADMIN_END_PORT ?: 4000
+                        // def _PORT = env.PORT ?: 8000
+                        // def _ADMIN_END_PORT = env.ADMIN_END_PORT ?: 4000
                         // Store the docker command in a variable
                         // def dockerCmd = """
                         //     docker pull ${env.IMAGE_NAME}:jenkins-1.0.1
