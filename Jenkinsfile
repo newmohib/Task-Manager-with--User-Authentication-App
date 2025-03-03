@@ -70,7 +70,7 @@ pipeline {
                             docker images &&
                             docker ps -a
                         """
-                        sh "ssh -o StrictHostKeyChecking=no ec2-user@18.143.88.4 '${remoteCommand}'"
+                        sh "ssh -o StrictHostKeyChecking=no ec2-user@18.143.98.4 '${remoteCommand}'"
                     }
                 }
             }
