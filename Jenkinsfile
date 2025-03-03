@@ -17,9 +17,9 @@
 
 pipeline {
     agent any
-    tools {
-        nodejs 'Nodejs-22.14.0'
-    }
+    // tools {
+    //     nodejs 'Nodejs-22.14.0'
+    // }
 
     // environment {
     //     IMAGE_NAME = "newmohib/task-manager-and-user-authentication"
@@ -45,11 +45,11 @@ pipeline {
             steps {
                 script {
                     //echo "building the docker image... ${env.MYSQL_URL}"
-                    sh 'node -v && npm -v && docker -v && docker images && docker ps -a'
                     //sh "docker build -t newmohib/task-manager-and-user-authentication:jenkins-1.0.1 ."
                     sshagent(['aws-linux-server-2gb-ram']) {
                         // Test SSH connection
                         sh "ssh -o StrictHostKeyChecking=no ec2-user@18.143.98.4 'echo Connected successfully!'"
+                        sh 'node -v && npm -v && docker -v && docker images && docker ps -a'
                     }
                 }
             }
