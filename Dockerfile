@@ -26,7 +26,7 @@ COPY package*.json ./
 # RUN npm install
 
 # Install PM2 globally
-# RUN npm install -g pm2
+RUN npm install -g pm2
 
 # Copy the entire application (backend + frontend)
 COPY . .
