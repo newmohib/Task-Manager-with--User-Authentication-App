@@ -5,11 +5,11 @@
   "main": "index.js",
   "scripts": {
     "dev": "NODE_ENV=dev nodemon ./src/index.js",
-    "start:backend": "NODE_ENV=dev npx pm2 start ./src/index.js --name backend",
-    "start:frontend": "NODE_ENV=dev npx pm2 start ./src/frontend-server.js --name frontend",
+    "start:backend": "NODE_ENV=dev  pm2 start ./src/index.js --name backend",
+    "start:frontend": "NODE_ENV=dev  pm2 start ./src/frontend-server.js --name frontend",
     "prod": "NODE_ENV=dev pm2 start ./src/ecosystem.config.js",
-    "start:both": "npm run stop && npm run start:backend && npm run start:frontend && npx pm2 logs",
-    "stop": "npx pm2 stop backend && npx  pm2 stop frontend"
+    "start:both": "npm run stop && npm run start:backend && npm run start:frontend &&  pm2 logs",
+    "stop": " pm2 stop backend &&   pm2 stop frontend"
   },
   "repository": {
     "type": "git",
@@ -40,4 +40,3 @@
     "winston": "^3.14.2"
   }
 }
-               
