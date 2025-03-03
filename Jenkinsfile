@@ -1,20 +1,21 @@
 pipeline {
     agent any
-    tools {
-        nodejs 'Nodejs-22.14.0'
-    }
-    environment {
-        IMAGE_NAME = "newmohib/task-manager-and-user-authentication"
-        CONTAINER_NAME = "task-manager-and-user-authentication"
-        MYSQL_URL = credentials('MYSQL_URL')
-        APP_URL = credentials('APP_URL')
-        ADMIN_APP_URL = credentials('ADMIN_APP_URL')
-        SMTP_HOST = credentials('SMTP_HOST')
-        SMTP_USER = credentials('SMTP_USER')
-        SMTP_PASS = credentials('SMTP_PASS')
-        PORT = credentials('TASK_MANGE_APP_PORT')
-        ADMIN_END_PORT = credentials('ADMIN_END_PORT')
-    }
+    // tools {
+    //     nodejs 'Nodejs-22.14.0'
+    // }
+    
+    // environment {
+    //     IMAGE_NAME = "newmohib/task-manager-and-user-authentication"
+    //     CONTAINER_NAME = "task-manager-and-user-authentication"
+    //     MYSQL_URL = credentials('MYSQL_URL')
+    //     APP_URL = credentials('APP_URL')
+    //     ADMIN_APP_URL = credentials('ADMIN_APP_URL')
+    //     SMTP_HOST = credentials('SMTP_HOST')
+    //     SMTP_USER = credentials('SMTP_USER')
+    //     SMTP_PASS = credentials('SMTP_PASS')
+    //     PORT = credentials('TASK_MANGE_APP_PORT')
+    //     ADMIN_END_PORT = credentials('ADMIN_END_PORT')
+    // }
 
     stages {
         // stage('Checkout Code') {
@@ -26,7 +27,7 @@ pipeline {
         stage('Build Docker Image') {
             steps {
                 script {
-                    echo "building the docker image... ${env.MYSQL_URL}"
+                    //echo "building the docker image... ${env.MYSQL_URL}"
                     //sh 'node -v && npm i && docker -v && docker images && docker ps -a'
                     //sh "docker build -t newmohib/task-manager-and-user-authentication:jenkins-1.0.1 ."
                     sshagent(['aws-linux-server-2gb-ram']) {
