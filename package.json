@@ -9,7 +9,7 @@
     "start:frontend": "NODE_ENV=dev npx pm2 start ./src/frontend-server.js --name frontend",
     "prod": "NODE_ENV=dev pm2 start ./src/ecosystem.config.js",
     "start:both": "npm run stop && npm run start:backend && npm run start:frontend && npx pm2 logs",
-    "stop": "npx pm2 stop backend && npx  pm2 stop frontend && npx pm2 delete backend && npx pm2 delete frontend"
+    "stop": "npx pm2 stop backend && npx  pm2 stop frontend"
   },
   "repository": {
     "type": "git",
@@ -40,3 +40,4 @@
     "winston": "^3.14.2"
   }
 }
+               
