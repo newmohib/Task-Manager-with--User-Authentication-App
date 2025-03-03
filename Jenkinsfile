@@ -45,7 +45,7 @@ pipeline {
             steps {
                 script {
                     //echo "building the docker image... ${env.MYSQL_URL}"
-                    //sh 'node -v && npm i && docker -v && docker images && docker ps -a'
+                    sh 'node -v && npm -v && docker -v && docker images && docker ps -a'
                     //sh "docker build -t newmohib/task-manager-and-user-authentication:jenkins-1.0.1 ."
                     sshagent(['aws-linux-server-2gb-ram']) {
                         // Test SSH connection
