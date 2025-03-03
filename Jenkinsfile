@@ -49,7 +49,25 @@ pipeline {
                     sshagent(['aws-linux-server-2gb-ram']) {
                         // Test SSH connection
                         sh "ssh -o StrictHostKeyChecking=no ec2-user@18.143.98.4 'echo Connected successfully!'"
-                        sh 'node -v && npm -v && docker -v && docker images && docker ps -a'
+                       // sh 'node -v && npm -v && docker -v && docker images && docker ps -a'
+                    }
+                }
+            }
+        }
+        stage('Check Remote Server') {
+            steps {
+                script {
+                    sshagent(['aws-linux-server-2gb-ram']) {
+                        sh '''
+                            ssh -o StrictHostKeyChecking=no ec2-user@18.143.98.4 << EOF
+                            echo "Connected successfully!"
+                            node -v
+                            npm -v
+                            docker -v
+                            docker images
+                            docker ps -a
+                            EOF
+                        '''
                     }
                 }
             }
